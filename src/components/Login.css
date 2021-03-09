@@ -1,0 +1,18 @@
+.container-general {
+    min-height: 93vh;
+    padding-bottom: 50px;
+}
+
+.img-animated {
+    animation-name: logo;
+    animation-duration: 1s;
+}
+
+@keyframes logo {
+    from {
+        width: 0;
+    }
+    to {
+        width: 300px;
+    }
+}

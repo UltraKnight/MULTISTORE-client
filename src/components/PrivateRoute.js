@@ -3,7 +3,7 @@ import { Route, Redirect} from 'react-router-dom';
 import {loggedin} from '../api';
 
 //High Order Component
-export default class PrivateRouter extends Component {
+export default class PrivateRoute extends Component {
     state = {
         isLoading: true,
         isLoggedIn: false
@@ -31,6 +31,6 @@ export default class PrivateRouter extends Component {
         
         return isLoading ? null : isLoggedIn ? (
             <Route path={path} component={component} exact={exact} />
-        ) : <Redirect to='/login' />                 
+        ) : <Redirect to='/login' />
     }
 }

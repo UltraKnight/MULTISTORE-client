@@ -1,0 +1,39 @@
+.nav-picture {
+    width: 35px;
+    height: 35px;
+    background-position-x: center;
+    background-position-y: top;
+    background-size: cover;
+    border-radius: 50%;
+}
+
+.custom-margin {
+    margin-left: 4.5rem;
+}
+
+.custom-display {
+    display: inline-block;
+}
+
+.custom-width {
+    width: 500px;
+}
+
+@media only screen and (max-width: 991px) {
+    .custom-margin {
+        margin-left: 0;
+        margin-top: 1rem;
+    }
+    #cart {
+        margin-top: 1rem;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .custom-display {
+        display: block;
+    }
+    .custom-width {
+        width: 300px;
+    }
+}
