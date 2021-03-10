@@ -21,7 +21,7 @@ export default function CheckoutForm({setIsPaid, user, setStatus, isPaid, total,
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
     window
-      .fetch("http://localhost:5000/api/create-payment-intent", {
+      .fetch(`${process.env.REACT_APP_MULTISTORE_API}/api/create-payment-intent`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

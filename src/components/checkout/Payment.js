@@ -4,7 +4,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 
-const promise = loadStripe("pk_test_51IT8KtGAKMDxiOOthGn4JxLjLfAY5gd8cgA1zzkQg4E1Y2M6XbtJUwdbh7Xwjx5KFBtOMtAcDse6FG9wtEjDfaak00w0kzF5rU");
+const promise = loadStripe(process.env.REACT_APP_STRIPE_PK);
 
 export default function Payment({step, setStep, user, setStatus}) {
     const [total, setTotal] = useState(0);

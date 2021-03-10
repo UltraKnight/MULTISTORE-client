@@ -21,6 +21,7 @@ export default function ProductsTab({activeTab}) {
     //END PRODUCTS
 
     useEffect(() => {
+        let isMounted = true;
         async function fetchData() {
             let response = await getUserProducts();
             setMyProducts(response.data);
@@ -28,7 +29,10 @@ export default function ProductsTab({activeTab}) {
             setCategories(response.data);
             setLoading(false);
         }
-        fetchData();
+        if(isMounted) {
+            fetchData();
+        }
+        return () => { isMounted = false }
     }, []);
 
     const handleEditProductClick = (e) => {

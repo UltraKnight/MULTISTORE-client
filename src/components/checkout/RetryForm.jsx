@@ -24,7 +24,7 @@ export default function RetryForm({total, orderId, retry, setRetry, setPurchases
     let isMounted = true;
     if(isMounted) {
       window
-      .fetch("http://localhost:5000/api/retry-payment-intent", {
+      .fetch(`${process.env.REACT_APP_MULTISTORE_API}/api/retry-payment-intent`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

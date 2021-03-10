@@ -147,9 +147,9 @@ export const updateEmail = (email) => {
 
 //Google api
 export const getLatLng = (postcode) => {
-    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${postcode}&key=AIzaSyBjiZi_3Di2zuAVdPGNqIhOoX7LdupLWM0`);
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${postcode}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`);
 }
 
 export const getAddress = (latLng) => {
-    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latLng.lat},${latLng.lng}&language=en&key=AIzaSyBjiZi_3Di2zuAVdPGNqIhOoX7LdupLWM0`);
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latLng.lat},${latLng.lng}&language=en&key=${process.env.REACT_APP_GOOGLE_API_KEY}`);
 }

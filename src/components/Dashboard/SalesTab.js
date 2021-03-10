@@ -12,6 +12,7 @@ export default function SalesTab({activeTab}) {
     const commentRef = useRef();
 
     useEffect(() => {
+        let isMounted = true;
         async function fetchData() {
             let response = await getSales();
             setSales(response.data);
@@ -23,7 +24,10 @@ export default function SalesTab({activeTab}) {
             }
             setLoading(false);
         }
-        fetchData();
+        if(isMounted) {
+            fetchData();
+        }
+        return () => {isMounted = false};
     }, []);
 
     const handleSaleClick = (e) => {

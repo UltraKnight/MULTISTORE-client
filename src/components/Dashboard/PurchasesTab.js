@@ -5,7 +5,7 @@ import RetryForm from '../checkout/RetryForm';
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
-const promise = loadStripe("pk_test_51IT8KtGAKMDxiOOthGn4JxLjLfAY5gd8cgA1zzkQg4E1Y2M6XbtJUwdbh7Xwjx5KFBtOMtAcDse6FG9wtEjDfaak00w0kzF5rU");
+const promise = loadStripe(process.env.REACT_APP_STRIPE_PK);
 
 export default function SalesTab({activeTab}) {
     const [loading, setLoading] = useState(true);
@@ -16,6 +16,7 @@ export default function SalesTab({activeTab}) {
     const commentRef = useRef();
 
     useEffect(() => {
+        let isMounted = true;
         async function fetchData() {
             let response = await getPurchases();
             setPurchases(response.data);
@@ -23,7 +24,10 @@ export default function SalesTab({activeTab}) {
             setLoading(false);
             setRetry(false);
         }
-        fetchData();
+        if(isMounted) {
+            fetchData();
+        }
+        return () => { isMounted = false }
     }, []);
 
     const handlePurchaseClick = (e) => {

@@ -9,24 +9,24 @@ export default function Review({step, setStep, user}) {
                     <h2>Review products</h2>
                 </div>
                 {
-                    user.cart.map((item, index) => {
+                    user.cart.map((item) => {
                         return (
-                            <React.Fragment>
-                            <div key={item._id} className='d-flex align-items-center flex-wrap'>
-                                <div className='me-5'>
-                                    <ul style={{listStyleType: 'none', fontSize: '1.2rem'}}>
-                                        <li>{item.product.name}</li>
-                                        <li>Quantity: {item.quantity}</li>
-                                        <li>Unit price: &euro; {item.product.price.toFixed(2)}</li>
-                                        <li>Subtotal: &euro; {(item.product.price * item.quantity).toFixed(2)}</li>
-                                    </ul>
+                            <div key={item._id}>
+                                <div className='d-flex align-items-center flex-wrap'>
+                                    <div className='me-5'>
+                                        <ul style={{listStyleType: 'none', fontSize: '1.2rem'}}>
+                                            <li>{item.product.name}</li>
+                                            <li>Quantity: {item.quantity}</li>
+                                            <li>Unit price: &euro; {item.product.price.toFixed(2)}</li>
+                                            <li>Subtotal: &euro; {(item.product.price * item.quantity).toFixed(2)}</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <img width='200px' src={item.product.image_url} alt={item.product.name} />
+                                    </div>
                                 </div>
-                                <div>
-                                    <img width='200px' src={item.product.image_url} alt={item.product.name} />
-                                </div>
+                                <hr />
                             </div>
-                            <hr key={index} />
-                            </React.Fragment>
                         )
                     })
                 }
