@@ -55,6 +55,10 @@ export default function Profile() {
     }, [editableBasic, editableContact, editableBilling, editableShipping]);
 
     const handleBasicKeyPress = (e) => {
+        if(e.target.innerHTML.length > 200) {
+            e.preventDefault();
+        }
+
         if (e.code === 'Enter' || e.code === 'NumpadEnter') {
             e.preventDefault();
             handleBasicClick();
@@ -62,6 +66,10 @@ export default function Profile() {
     }
 
     const handleBillingKeyPress = (e) => {
+        if(e.target.innerHTML.length > 200) {
+            e.preventDefault();
+        }
+
         if (e.code === 'Enter' || e.code === 'NumpadEnter') {
             e.preventDefault();
             handleBillingClick();
@@ -69,6 +77,10 @@ export default function Profile() {
     }
 
     const handleShippingKeyPress = (e) => {
+        if(e.target.innerHTML.length > 200) {
+            e.preventDefault();
+        }
+
         if (e.code === 'Enter' || e.code === 'NumpadEnter') {
             e.preventDefault();
             handleShippingClick();
@@ -135,6 +147,11 @@ export default function Profile() {
             const phone = bilPhoneRef.current.innerHTML.trim();
             const copyToShip = isShipEqualsRef.current.checked;
 
+            if(state.length !== 2) {
+                toast.warning('State must have 2 letters');
+                return;
+            }
+
             if(!firstName || !lastName || !address1 || !city || !state || !country || !postcode || !phone) {
                 toast.warning('Missing fields');
                 return;
@@ -145,6 +162,15 @@ export default function Profile() {
                 setEditableBilling(false);
                 toast.success(response.data);
                 if(copyToShip) {
+                    shipFirstNameRef.current.innerHTML = firstName;
+                    shipLastNameRef.current.innerHTML = lastName;
+                    shipAddress1Ref.current.innerHTML = address1;
+                    shipAddress2Ref.current.innerHTML = address2;
+                    shipCityRef.current.innerHTML = city;
+                    shipStateRef.current.innerHTML = state;
+                    shipCountryRef.current.innerHTML = country;
+                    shipPostcodeRef.current.innerHTML = postcode;
+                    shipPhoneRef.current.innerHTML = phone;
                     await updateProfile({shipping: {firstName, lastName, address1, address2, city, state, country, postcode, phone, phoneConfirmed: user.billing.phoneConfirmed}});
                     toast.success('Copy data succesfull');
                 }
@@ -184,24 +210,66 @@ export default function Profile() {
         shipPhoneRef.current.innerHTML = user.shipping.phone;
     }
 
-    const handleFillAddress = async (e, postcode) => {
+    const handleFillBillingAddress = async (e, postcode) => {
         e.preventDefault();
         let latLng = await getLatLng(postcode);
         if(latLng.data.status === 'OK') {
             latLng = latLng.data.results[0].geometry.location;
             const address = await getAddress(latLng);
             if(address.data.results.length) {
-                shipAddress1Ref.current.innerHTML = address.data.results[0].address_components[1].long_name;
-                shipAddress2Ref.current.innerHTML = address.data.results[0].address_components[2].long_name;
-                shipCityRef.current.innerHTML = address.data.results[0].address_components[3].long_name;
-                shipStateRef.current.innerHTML = address.data.results[0].address_components[4].long_name;
-                shipCountryRef.current.innerHTML = address.data.results[0].address_components[5].long_name;
-                shipPostcodeRef.current.innerHTML = address.data.results[0].address_components[6].long_name;
+                bilAddress1Ref.current.innerHTML = `${address.data.results[0].address_components[1].long_name}, number`;
+                bilAddress2Ref.current.innerHTML = address.data.results[0].address_components[2].long_name;
+                
+                if(address.data.results[0].address_components.length === 6) {
+                    bilCityRef.current.innerHTML = address.data.results[0].address_components[3].long_name;
+                    bilCountryRef.current.innerHTML = address.data.results[0].address_components[4].long_name;
+                    bilPostcodeRef.current.innerHTML = address.data.results[0].address_components[5].long_name
+                } else {
+                    bilCityRef.current.innerHTML = address.data.results[0].address_components[3].long_name;
+                    bilStateRef.current.innerHTML = address.data.results[0].address_components[4].short_name;
+                    bilCountryRef.current.innerHTML = address.data.results[0].address_components[5].long_name;
+                    bilPostcodeRef.current.innerHTML = address.data.results[0].address_components[6].long_name;
+                }
             } else {
                 toast.error('Address not found');
             }
         } else {
             toast.error('Address not found');
+        }
+    }
+
+    const handleFillShippingAddress = async (e, postcode) => {
+        e.preventDefault();
+        let latLng = await getLatLng(postcode);
+        if(latLng.data.status === 'OK') {
+            latLng = latLng.data.results[0].geometry.location;
+            const address = await getAddress(latLng);
+            if(address.data.results.length) {
+                shipAddress1Ref.current.innerHTML = `${address.data.results[0].address_components[1].long_name}, number`;
+                shipAddress2Ref.current.innerHTML = address.data.results[0].address_components[2].long_name;
+                
+                if(address.data.results[0].address_components.length === 6) {
+                    shipCityRef.current.innerHTML = address.data.results[0].address_components[3].long_name;
+                    shipCountryRef.current.innerHTML = address.data.results[0].address_components[4].long_name;
+                    shipPostcodeRef.current.innerHTML = address.data.results[0].address_components[5].long_name
+                } else {
+                    shipCityRef.current.innerHTML = address.data.results[0].address_components[3].long_name;
+                    shipStateRef.current.innerHTML = address.data.results[0].address_components[4].short_name;
+                    shipCountryRef.current.innerHTML = address.data.results[0].address_components[5].long_name;
+                    shipPostcodeRef.current.innerHTML = address.data.results[0].address_components[6].long_name;
+                }
+            } else {
+                toast.error('Address not found');
+            }
+        } else {
+            toast.error('Address not found');
+        }
+    }
+
+    const handlePostcodeInput = (e) => {
+        if(/^([0-9]{5}|[a-zA-Z][a-zA-Z ]{0,49})$/.test(e.code) && e.code !== 'Backspace' 
+            && e.code !== 'ArrowLeft' && e.code !== 'ArrowRight' && e.code !== 'Delete' && e.code !== 'Enter') {
+            e.preventDefault();
         }
     }
 
@@ -217,6 +285,11 @@ export default function Profile() {
             const postcode = shipPostcodeRef.current.innerHTML.trim();
             const phone = shipPhoneRef.current.innerHTML.trim();
             
+            if(state.length !== 2) {
+                toast.warning('State must have 2 letters');
+                return;
+            }
+
             if(!firstName || !lastName || !address1 || !city || !state || !country || !postcode || !phone) {
                 toast.warning('Missing fields');
                 return;
@@ -252,6 +325,7 @@ export default function Profile() {
                                 onMouseUp={() => {
                                     setEditableBasic(false);
                                     fullNameRef.current.innerHTML = user.fullName;
+                                    storeNameRef.current.innerHTML = user.storeName;
                                 }} style={{fontSize: '1.25rem'}} className='btn btn-transparent p-0 m-0 shadow-none ms-3'>
                                 <FiX />
                             </button>
@@ -291,7 +365,7 @@ export default function Profile() {
                         <small className={user.emailConfirmed ? 'text-success' : 'text-danger'}><br />{user.emailConfirmed ? 'confirmed' : 'not confirmed'}</small>
                     </p>
                     <form id='form-contact' onSubmit={handleEmailSubmit}>
-                        <input className='form-control' ref={emailRef} type="email" style={{display: editableContact ? 'inline' : 'none'}} />
+                        <input className='form-control' ref={emailRef} type="email" maxLength='200' style={{display: editableContact ? 'inline' : 'none'}} />
                     </form>
                 </div>
             </div>
@@ -315,8 +389,8 @@ export default function Profile() {
                     </div>
                     {editableBilling
                     ?
-                        <form className='d-flex mt-3' onSubmit={(e) => handleFillAddress(e, postcodeRef.current.value)}>
-                            <input className='form-control me-2' ref={postcodeRef} type="text" placeholder='Postal Code #0000-000' />
+                        <form className='d-flex mt-3' onSubmit={(e) => handleFillBillingAddress(e, postcodeRef.current.value)}>
+                            <input onKeyDown={handlePostcodeInput} className='form-control me-2' ref={postcodeRef} type="text" placeholder='Postal Code #0000000' />
                             <button type='submit' className='btn btn-success'>Search</button>
                         </form>
                     : null
@@ -366,6 +440,14 @@ export default function Profile() {
                             </button>
                         }
                     </div>
+                    {editableShipping
+                    ?
+                        <form className='d-flex mt-3' onSubmit={(e) => handleFillShippingAddress(e, postcodeRef.current.value)}>
+                            <input onKeyDown={handlePostcodeInput} className='form-control me-2' ref={postcodeRef} type="text" placeholder='Postal Code #0000000' />
+                            <button type='submit' className='btn btn-success'>Search</button>
+                        </form>
+                    : null
+                    }
                     <hr />
                     <p>First name: <span ref={shipFirstNameRef} className={editableShipping ? 'border border-dark' : 'bg-light'}
                         onKeyPress={handleShippingKeyPress} suppressContentEditableWarning={true} contentEditable={`${editableShipping}`}>{user.shipping.firstName}</span></p>
