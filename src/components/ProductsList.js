@@ -74,11 +74,11 @@ export default function ProductsList({match}) {
             </div>
         </div>
         : null}
-        <div className='container-fluid d-flex flex-wrap justify-content-between'>
+        <div className='container-fluid d-flex flex-wrap justify-content-between pb-3'>
         {
         products.map(product => {
             return (
-            <div key={product._id} className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '380px', boxShadow: '2px 2px 6px #888888'}}>
+            <div key={product._id} className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '350px', boxShadow: '2px 2px 6px #888888'}}>
                 {product.quantity > 0 ? (
                 <>
                 <Link to={`/products/${product._id}`}>
@@ -94,6 +94,10 @@ export default function ProductsList({match}) {
                         <Link style={{textDecoration: 'none'}} to={`/products/${product._id}`}>{product.name}</Link>
                     </h5>
                     <p className="card-text"><small className='text-muted'>available: {product.quantity}</small></p>
+                    <p className='card-text'><small className='text-muted'>From: {
+                        (product.createdBy.billing.state ? product.createdBy.billing.state : 'n/a') +
+                        (product.createdBy.billing.country ? ' - ' + product.createdBy.billing.country : '')
+                    }</small></p>
                     <h4 className="card-text">&euro; {product.price.toFixed(2)}</h4>
                 </div>
                 </>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {loggedin, updateProfile, updateEmail, getLatLng, getAddress} from '../api';
+import {loggedin, updateProfile, updateEmail, getLatLng, getAddress, uploadFile} from '../api';
 import {FiEdit, FiSave, FiX} from 'react-icons/fi';
 import './Profile.css';
 import { toast } from 'react-toastify';
@@ -10,6 +10,7 @@ export default function Profile() {
     const [editableContact, setEditableContact] = useState(false);
     const [editableBilling, setEditableBilling] = useState(false);
     const [editableShipping, setEditableShipping] = useState(false);
+    const [canChangePic, setCanChangePic] = useState(false);
     const fullNameRef = useRef();
     const storeNameRef = useRef();
     const usernameRef = useRef();
@@ -89,7 +90,7 @@ export default function Profile() {
 
     const handleEmailSubmit = async (e) => {
         e.preventDefault();
-        const email = emailRef.current.value.trim();
+        const email = emailRef.current.value.trim().replace(/&nbsp;/g, '');
         if(!email) {
             toast.warning('Email cannnot be empty');
             return;
@@ -106,9 +107,9 @@ export default function Profile() {
 
     const handleBasicClick = async () => {
         if(editableBasic) {
-            const fullName = fullNameRef.current.innerHTML.trim();
-            const storeName = storeNameRef.current.innerHTML.trim();
-            const username = usernameRef.current.innerHTML.trim();
+            const fullName = fullNameRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const storeName = storeNameRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const username = usernameRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
             
             if(!fullName || !username) {
                 toast.warning('Missing fields');
@@ -136,15 +137,15 @@ export default function Profile() {
 
     const handleBillingClick = async () => {
         if(editableBilling) {
-            const firstName = bilFirstNameRef.current.innerHTML.trim();
-            const lastName = bilLastNameRef.current.innerHTML.trim();
-            const address1 = bilAddress1Ref.current.innerHTML.trim();
-            const address2 = bilAddress2Ref.current.innerHTML.trim();
-            const city = bilCityRef.current.innerHTML.trim();
-            const state = bilStateRef.current.innerHTML.trim();
-            const country = bilCountryRef.current.innerHTML.trim();
-            const postcode = bilPostcodeRef.current.innerHTML.trim();
-            const phone = bilPhoneRef.current.innerHTML.trim();
+            const firstName = bilFirstNameRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const lastName = bilLastNameRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const address1 = bilAddress1Ref.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const address2 = bilAddress2Ref.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const city = bilCityRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const state = bilStateRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const country = bilCountryRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const postcode = bilPostcodeRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const phone = bilPhoneRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
             const copyToShip = isShipEqualsRef.current.checked;
 
             if(state.length !== 2) {
@@ -275,15 +276,15 @@ export default function Profile() {
 
     const handleShippingClick = async () => {
         if(editableShipping) {
-            const firstName = shipFirstNameRef.current.innerHTML.trim();
-            const lastName = shipLastNameRef.current.innerHTML.trim();
-            const address1 = shipAddress1Ref.current.innerHTML.trim();
-            const address2 = shipAddress2Ref.current.innerHTML.trim();
-            const city = shipCityRef.current.innerHTML.trim();
-            const state = shipStateRef.current.innerHTML.trim();
-            const country = shipCountryRef.current.innerHTML.trim();
-            const postcode = shipPostcodeRef.current.innerHTML.trim();
-            const phone = shipPhoneRef.current.innerHTML.trim();
+            const firstName = shipFirstNameRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const lastName = shipLastNameRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const address1 = shipAddress1Ref.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const address2 = shipAddress2Ref.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const city = shipCityRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const state = shipStateRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const country = shipCountryRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const postcode = shipPostcodeRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
+            const phone = shipPhoneRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
             
             if(state.length !== 2) {
                 toast.warning('State must have 2 letters');
@@ -307,11 +308,49 @@ export default function Profile() {
         }
     }
 
+    const handleChangePicture = async (e) => {
+        const image = e.target.files[0];
+        if(! image) {
+            setCanChangePic(false);
+            return;
+        }
+
+        try {
+            const uploadData = new FormData();
+            uploadData.append('file', image);
+            //returns image_url after upload
+            let response = await uploadFile(uploadData);
+
+            const newData = {profile_picture: response.data.fileUrl};
+
+            await updateProfile(newData);
+
+            response = await loggedin();
+            if(response.data._id) {
+                setUser(response.data);
+            }
+            setCanChangePic(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleCanChangePic = () => {
+        setCanChangePic(true);
+    }
+
     return user._id ? (
         <div className='container-fluid mt-3'>
             <div className='row'>
-                <div className='col-lg-2 offset-lg-1 col-md-2'>
-                <div className="me-2 picture" style={{backgroundImage: `url(${user.profile_picture})`}}></div>
+                <div className='col-lg-2 offset-lg-1 col-md-2 text-center'>
+                    <div className="me-2 picture" style={{backgroundImage: `url(${user.profile_picture})`}}></div>
+                    <div className='mt-3'>
+                        {
+                            canChangePic
+                            ?<input onChange={handleChangePicture} className='form-control form-control-sm' type="file" name='profile-pic' id='profile-pic' />
+                            :<button onClick={handleCanChangePic} className='btn btn-warning btn-sm'>Change Picture</button>
+                        }
+                    </div>
                 </div>
                 <div className='col-lg-4 col-md-5'>
                     <h5 className='d-inline'>Basic information</h5>
