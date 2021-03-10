@@ -143,3 +143,13 @@ export const updateProfile = (newData) => {
 export const updateEmail = (email) => {
     return axios.post(`${baseURL}/profile/email`, email, {withCredentials: true});
 }
+/* END AUTHENTICATION ROUTES */
+
+//Google api
+export const getLatLng = (postcode) => {
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${postcode}&key=AIzaSyBjiZi_3Di2zuAVdPGNqIhOoX7LdupLWM0`);
+}
+
+export const getAddress = (latLng) => {
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latLng.lat},${latLng.lng}&language=en&key=AIzaSyBjiZi_3Di2zuAVdPGNqIhOoX7LdupLWM0`);
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {loggedin, updateProfile, updateEmail} from '../api';
+import {loggedin, updateProfile, updateEmail, getLatLng, getAddress} from '../api';
 import {FiEdit, FiSave, FiX} from 'react-icons/fi';
 import './Profile.css';
 import { toast } from 'react-toastify';
@@ -33,6 +33,8 @@ export default function Profile() {
     const shipPostcodeRef = useRef();
     const shipPhoneRef = useRef();
     const isShipEqualsRef = useRef();
+
+    const postcodeRef = useRef();
 
     useEffect(() => {
         async function fetchData() {
@@ -182,6 +184,27 @@ export default function Profile() {
         shipPhoneRef.current.innerHTML = user.shipping.phone;
     }
 
+    const handleFillAddress = async (e, postcode) => {
+        e.preventDefault();
+        let latLng = await getLatLng(postcode);
+        if(latLng.data.status === 'OK') {
+            latLng = latLng.data.results[0].geometry.location;
+            const address = await getAddress(latLng);
+            if(address.data.results.length) {
+                shipAddress1Ref.current.innerHTML = address.data.results[0].address_components[1].long_name;
+                shipAddress2Ref.current.innerHTML = address.data.results[0].address_components[2].long_name;
+                shipCityRef.current.innerHTML = address.data.results[0].address_components[3].long_name;
+                shipStateRef.current.innerHTML = address.data.results[0].address_components[4].long_name;
+                shipCountryRef.current.innerHTML = address.data.results[0].address_components[5].long_name;
+                shipPostcodeRef.current.innerHTML = address.data.results[0].address_components[6].long_name;
+            } else {
+                toast.error('Address not found');
+            }
+        } else {
+            toast.error('Address not found');
+        }
+    }
+
     const handleShippingClick = async () => {
         if(editableShipping) {
             const firstName = shipFirstNameRef.current.innerHTML.trim();
@@ -290,6 +313,14 @@ export default function Profile() {
                             </button>
                         }
                     </div>
+                    {editableBilling
+                    ?
+                        <form className='d-flex mt-3' onSubmit={(e) => handleFillAddress(e, postcodeRef.current.value)}>
+                            <input className='form-control me-2' ref={postcodeRef} type="text" placeholder='Postal Code #0000-000' />
+                            <button type='submit' className='btn btn-success'>Search</button>
+                        </form>
+                    : null
+                    }
                     <hr />
                     <p>First name: <span ref={bilFirstNameRef} className={editableBilling ? 'border border-dark' : 'bg-light'}
                         onKeyPress={handleBillingKeyPress} suppressContentEditableWarning={true} contentEditable={`${editableBilling}`}>{user.billing.firstName}</span></p>
