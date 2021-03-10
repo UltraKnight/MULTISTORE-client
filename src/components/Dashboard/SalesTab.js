@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import  { getSales, addComment, updateStatus, loggedin } from '../../api';
+import  { getSales, addComment, updateStatus, loggedin, updateProduct } from '../../api';
 import { toast } from 'react-toastify';
 
 export default function SalesTab({activeTab}) {
@@ -74,14 +74,24 @@ export default function SalesTab({activeTab}) {
         }
 
         try {
+            //update the status of the order
             await updateStatus(selectedSale._id, {status: status});
             toast.success(`Status changed to ${status}`);
 
+            //get the updated orders
             let response = await getSales();
             setSales(response.data);
 
+            //get the updated sale from DB
             const updatedSale = response.data.find(item => item._id === selectedSale._id);
             setSelectedSale(updatedSale);
+
+            //reassign the removed products quantity when the status is canceled
+            if(status === 'Canceled') {
+                selectedSale.products.forEach(async item => {
+                    await updateProduct({quantity: (item.product.quantity + item.quantity)}, item.product._id);
+                });
+            }
 
             setStatus('');
             setLoading(false);
@@ -156,23 +166,30 @@ export default function SalesTab({activeTab}) {
                         </div>
                         <hr/>
 
-                        {/* 'Pending', 'Confirmed', 'Cancelled', 'Refunded', 'In transit', 'Delivered', 'Processing' */}
-                        <form onSubmit={handleUpdateStatusSubmit} className='mb-3'>
-                            <div className='mb-3'>
-                                <label className="form-label" htmlFor="status">Current status: <span>{selectedSale.status}</span></label>
-                                <select value={status} id='status' onChange={handleSaleChange} className="form-select" aria-label="select status">
-                                    <option disabled value=''>Select the new status</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="Processing">Processing</option>
-                                    <option value="Confirmed">Confirmed</option>
-                                    <option value="Cancelled">Cancelled</option>
-                                    <option value="Refunded">Refunded</option>
-                                    <option value="In transit">In transit</option>
-                                    <option value="Delivered">Delivered</option>
-                                </select>
-                            </div>
-                            <button type="submit" className="btn btn-sm btn-outline-success border border-dark me-2">Update Status</button>
-                        </form>
+                        {/* 'Pending', 'Confirmed', 'Canceled', 'Refunded', 'In transit', 'Delivered', 'Processing' */}
+                        {selectedSale.status !== 'Canceled' && selectedSale.status !== 'Delivered'
+                        ?
+                            <form onSubmit={handleUpdateStatusSubmit} className='mb-3'>
+                                <div className='mb-3'>
+                                    <label className="form-label" htmlFor="status">Current status: <span>{selectedSale.status}</span></label>
+                                    <select value={status} id='status' onChange={handleSaleChange} className="form-select" aria-label="select status">
+                                        <option disabled value=''>Select the new status</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Processing">Processing</option>
+                                        <option value="Confirmed">Confirmed</option>
+                                        <option value="Canceled">Canceled*</option>
+                                        <option value="Refunded">Refunded</option>
+                                        <option value="In transit">In transit</option>
+                                        <option value="Delivered">Delivered*</option>
+                                    </select>
+                                    <small>* can't be undone</small>
+                                </div>
+                                <button type="submit" className="btn btn-sm btn-outline-success border border-dark me-2">Update Status</button>
+                            </form>
+                        :
+                            <p><strong>Current status: </strong>{selectedSale.status}</p>
+                        }
+
                         <hr/>
                         <div className='rounded px-2' style={{backgroundColor: 'rgba(255, 244, 199, 0.3)'}}>
                             <h5>Comments:</h5>

@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import  { getPurchases, addComment } from '../../api';
 import { toast } from 'react-toastify';
+import RetryForm from '../checkout/RetryForm';
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+
+const promise = loadStripe("pk_test_51IT8KtGAKMDxiOOthGn4JxLjLfAY5gd8cgA1zzkQg4E1Y2M6XbtJUwdbh7Xwjx5KFBtOMtAcDse6FG9wtEjDfaak00w0kzF5rU");
 
 export default function SalesTab({activeTab}) {
     const [loading, setLoading] = useState(true);
-
+    const [retry, setRetry] = useState(false);
     const [purchases, setPurchases] = useState([]);
     const [selectedPurchase, setSelectedPurchase] = useState({});
     const [seller, setSeller] = useState('');
@@ -16,6 +21,7 @@ export default function SalesTab({activeTab}) {
             setPurchases(response.data);
             setSeller('');
             setLoading(false);
+            setRetry(false);
         }
         fetchData();
     }, []);
@@ -68,6 +74,11 @@ export default function SalesTab({activeTab}) {
     }
 
     return !loading ? (
+        retry ?
+        <Elements stripe={promise}>
+            <RetryForm total={selectedPurchase.total} orderId={selectedPurchase._id} retry={retry} setRetry={setRetry} setPurchases={setPurchases} setSelectedPurchase={setSelectedPurchase} />
+        </Elements>
+        :
         <div className={`tab-pane fade ${activeTab === 2 ? 'show active' : ''}`} id="purchases" role="tabpanel" aria-labelledby="purchases-tab">
             <div className='row'>
                 <div className='col-md-3 my-3'>
@@ -109,7 +120,7 @@ export default function SalesTab({activeTab}) {
                         <p><strong>Order date: </strong><span>{new Date(selectedPurchase.orderDate).toLocaleDateString()}</span></p>
                         <p><strong>Total: </strong>&euro; <span>{selectedPurchase.total.toFixed(2)}</span></p>
                         <hr/>
-                        <h4><strong>Current status: </strong><span>{selectedPurchase.status}</span></h4>
+                        <h4><strong>Current status: </strong><span>{selectedPurchase.status}</span>{selectedPurchase.status === 'Pending' ? <button onClick={() => setRetry(true)} className='btn btn-warning'>Try to pay again</button> : null}</h4>
                         <hr/>
                         <div className='rounded px-2' style={{backgroundColor: 'rgba(255, 244, 199, 0.3)'}}>
                             <h5>Comments:</h5>

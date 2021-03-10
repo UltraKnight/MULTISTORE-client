@@ -11,7 +11,7 @@ export default function Review({step, setStep, user}) {
                 {
                     user.cart.map((item, index) => {
                         return (
-                            <>
+                            <React.Fragment>
                             <div key={item._id} className='d-flex align-items-center flex-wrap'>
                                 <div className='me-5'>
                                     <ul style={{listStyleType: 'none', fontSize: '1.2rem'}}>
@@ -26,7 +26,7 @@ export default function Review({step, setStep, user}) {
                                 </div>
                             </div>
                             <hr key={index} />
-                            </>
+                            </React.Fragment>
                         )
                     })
                 }
