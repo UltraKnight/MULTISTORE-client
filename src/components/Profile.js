@@ -274,6 +274,15 @@ export default function Profile() {
         }
     }
 
+    //for smartphone
+    const handlePostcodeOnInput = (e) => {
+        if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            if(/^([0-9]{5}|[a-zA-Z][a-zA-Z ]{0,49})$/.test(e.nativeEvent.data) &&  e.nativeEvent.inputType !== "deleteContentBackward") {
+                e.preventDefault();
+            }
+        }
+    }
+
     const handleShippingClick = async () => {
         if(editableShipping) {
             const firstName = shipFirstNameRef.current.innerHTML.trim().replace(/&nbsp;/g, '');
@@ -429,7 +438,7 @@ export default function Profile() {
                     {editableBilling
                     ?
                         <form className='d-flex mt-3' onSubmit={(e) => handleFillBillingAddress(e, postcodeRef.current.value)}>
-                            <input onKeyDown={handlePostcodeInput} className='form-control me-2' ref={postcodeRef} type="text" placeholder='Postal Code #0000000' />
+                            <input onInput={handlePostcodeOnInput} onKeyDown={handlePostcodeInput} className='form-control me-2' ref={postcodeRef} type="text" placeholder='Postal Code #0000000' />
                             <button type='submit' className='btn btn-success'>Search</button>
                         </form>
                     : null
@@ -482,7 +491,7 @@ export default function Profile() {
                     {editableShipping
                     ?
                         <form className='d-flex mt-3' onSubmit={(e) => handleFillShippingAddress(e, postcodeRef.current.value)}>
-                            <input onKeyDown={handlePostcodeInput} className='form-control me-2' ref={postcodeRef} type="text" placeholder='Postal Code #0000000' />
+                            <input onInput={handlePostcodeOnInput} onKeyDown={handlePostcodeInput} className='form-control me-2' ref={postcodeRef} type="text" placeholder='Postal Code #0000000' />
                             <button type='submit' className='btn btn-success'>Search</button>
                         </form>
                     : null
