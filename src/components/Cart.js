@@ -26,8 +26,8 @@ export default function Cart() {
                         break;
                     }
                 }
-                
-                setCanFinish(! deletedFound);
+
+                setCanFinish(!deletedFound && response.data.emailConfirmed);
             }
         }
         fetchData();
@@ -140,6 +140,7 @@ export default function Cart() {
                 </tr>
             </tbody>
             </table>
+            {user.emailConfirmed ? null : <p className='text-center'>Please, confirm your email before proceed. <Link to='/profile'>Go to profile</Link></p>}
         </div>
     ) : (
         <div className='text-center'>

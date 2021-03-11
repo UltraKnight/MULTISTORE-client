@@ -143,6 +143,15 @@ export const updateProfile = (newData) => {
 export const updateEmail = (email) => {
     return axios.post(`${baseURL}/profile/email`, email, {withCredentials: true});
 }
+
+export const confirmEmail = (id) => {
+    return axios.get(`${baseURL}/email/confirm/${id}`);
+}
+
+export const sendEmail = (email, id) => {
+    return axios.post(`${baseURL}/email/send`, {email: email, id: id}, {withCredentials: true});
+}
+
 /* END AUTHENTICATION ROUTES */
 
 //Google api

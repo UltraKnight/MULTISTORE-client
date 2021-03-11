@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { confirmEmail } from '../api';
 
-export default class Confirm extends Component {
+export default class ConfirmEmail extends Component {
   state = {
     confirming: true
   }
@@ -14,20 +14,25 @@ export default class Confirm extends Component {
     const {id} = this.props.match.params;
     try {
         const response = await confirmEmail(id);
+
         this.setState({confirming: false});
-        toast.success(data.msg);
+        if(response.data.msg === 'Could not find you!') {
+            toast.error(response.data.msg);
+          
+        } else {
+            toast.success(response.data.msg);
+        }
     } catch (error) {
         console.log(error);
+        this.props.history.push('/login');
     }
   }
 
   render = () =>
-    <div className='confirm'>
+    <div className='confirm text-center mt-3'>
       {this.state.confirming
-        ? <Spinner size='8x' spinning={'spinning'} /> 
-        : <Link to='/'>
-            <Spinner size='8x' spinning={''} /> 
-          </Link>
+        ? <h2>Veryfing email...</h2>
+        : <Link to='/profile' className='btn btn-warning'>Go to your profile</Link>
       }
     </div>
 }

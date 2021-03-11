@@ -1,10 +1,11 @@
-import React, {useRef} from 'react';
-import {signup} from '../api';
+import React, {useRef, useState} from 'react';
+import {login, signup} from '../api';
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import './Signup.css';
 
-export default function Login({setCurrentUser, history}) {
+export default function Signup({setCurrentUser, history}) {
+    const [isLoading, setIsLoading] = useState(false);
     const usernameRef = useRef();
     const passwordRef = useRef();
     const nameRef = useRef();
@@ -12,28 +13,37 @@ export default function Login({setCurrentUser, history}) {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         const username = usernameRef.current.value;
         const password = passwordRef.current.value;
         const fullName = nameRef.current.value;
         const email = emailRef.current.value;
-
+        
         try { 
             /* username, password, fullName, email */
-            const response = await signup(username, password, fullName, email);
             /**
              * lift up the state to app.js
              * setCurrentUser which is a prop
              */
-            setCurrentUser(response.data);
-            toast.success('Account created');
-            history.push('/');
+            const response = await signup(username, password, fullName, email);
+            if(response.data._id) {
+                await login(username, password);
+                setCurrentUser(response.data, () => {
+                    toast.success('Account created');
+                    history.push('/');
+                });
+            } else {
+                toast.error(response.data);
+                setIsLoading(false);
+            }
         } catch (error) {
             toast.error('An error occurred');
             console.log(`Error: ${error}`);
+            setIsLoading(false);
         }
     }
 
-    return(
+    return !isLoading ? (
         <div className="container-fluid container-general">
             <div className='text-center mt-3'>
                 <img className='img-animated' src="/images/multistore-logo-small.png" width="300px" alt="multistore-logo" />
@@ -65,5 +75,5 @@ export default function Login({setCurrentUser, history}) {
                 </form>
             </div>
         </div>
-    )
+    ) : <div className='text-center'><h2>Creating your account...</h2></div>
 }

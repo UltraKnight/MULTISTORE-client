@@ -28,16 +28,16 @@ export default function Dashboard() {
             </ul>
             <div className="tab-content" id="myTabContent">
                 {/* Sales */}
-                {activeTab === 1? <SalesTab activeTab={activeTab} /> : null}
+                {activeTab && activeTab === 1? <SalesTab activeTab={activeTab} /> : null}
                 
                 {/* Purchases */}
-                {activeTab === 2 ? <PurchasesTab activeTab={activeTab} /> : null}
+                {activeTab && activeTab === 2 ? <PurchasesTab activeTab={activeTab} /> : null}
                 
                 {/* Products */}
-                {activeTab === 3 ? <ProductsTab activeTab={activeTab} /> : null}
+                {activeTab && activeTab === 3 ? <ProductsTab activeTab={activeTab} /> : null}
 
                 {/* Categories */}
-                {activeTab === 4 ? <CategoriesTab activeTab={activeTab} /> : null}
+                {activeTab && activeTab === 4 ? <CategoriesTab activeTab={activeTab} /> : null}
                 {/* <div className={`tab-pane fade ${activeTab === 4 ? 'show active' : ''}`} id="categories" role="tabpanel" aria-labelledby="categories-tab"></div> */}
             </div>
         </div>

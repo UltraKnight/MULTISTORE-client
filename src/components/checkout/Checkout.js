@@ -28,7 +28,7 @@ export default function Checkout() {
     }, []);
 
     return user._id ? (
-        user.cart.length ?
+        user.cart.length && user.emailConfirmed ?
         <>
         <Review step={checkoutStep} setStep={setCheckoutStep} user={user} />
         <ConfirmShipping step={checkoutStep} setStep={setCheckoutStep} user={user} />

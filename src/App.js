@@ -18,7 +18,7 @@ import Profile from './components/Profile';
 import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './components/Dashboard/Dashboard';
 import Checkout from './components/checkout/Checkout';
-
+import ConfirmEmail from './components/ConfirmEmail';
 //api
 import {loggedin} from './api';
 
@@ -29,11 +29,11 @@ export default class App extends Component {
 
   //used to logout - setCurrentUser to null
   //or to login - setCurrentUser to the loggedin user
-  setCurrentUser = (user) => {
+  setCurrentUser = (user, callback) => {    
     this.setState({
       loggedInUser: user
-    });
-  }
+    }, callback
+  )}
 
   async componentDidMount() {
     if(this.state.loggedInUser === null) {
@@ -63,6 +63,7 @@ export default class App extends Component {
           <Route exact path='/products/by-category/:categoryId' component={ProductsList} />
           <Route exact path='/products/:productId' component={ProductDetails} />
           <Route exact path='/products' component={ProductsList} />
+          <Route exact path='/confirm/:id' component={ConfirmEmail} />
           <PrivateRoute exact path='/cart' component={Cart} />
           <PrivateRoute exact path='/dashboard' component={Dashboard} />
           <PrivateRoute exact path='/profile' component={Profile} />
@@ -74,7 +75,7 @@ export default class App extends Component {
           }} />
           <Route exact path='/signup' render={
             (props) => {
-              return <Signup {...props} setCurrentUser={this.setCurrentUser} />
+              return <Signup {...props} setCurrentUser={this.setCurrentUser} l={loggedInUser} />
           }} />
         </Switch>
       </div>

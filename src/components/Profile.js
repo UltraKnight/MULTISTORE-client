@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {loggedin, updateProfile, updateEmail, getLatLng, getAddress, uploadFile} from '../api';
+import {loggedin, updateProfile, updateEmail, getLatLng, getAddress, uploadFile, sendEmail} from '../api';
 import {FiEdit, FiSave, FiX} from 'react-icons/fi';
 import './Profile.css';
 import { toast } from 'react-toastify';
@@ -11,6 +11,7 @@ export default function Profile() {
     const [editableBilling, setEditableBilling] = useState(false);
     const [editableShipping, setEditableShipping] = useState(false);
     const [canChangePic, setCanChangePic] = useState(false);
+    const [sendingEmail, setSendingEmail] = useState(false);
     const fullNameRef = useRef();
     const storeNameRef = useRef();
     const usernameRef = useRef();
@@ -339,6 +340,18 @@ export default function Profile() {
         setCanChangePic(true);
     }
 
+    const resendEmail = async (e) => {
+        e.preventDefault();
+        setSendingEmail(true);
+        try {
+            const response = await sendEmail(user.email, user._id);
+            toast.success(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+        setSendingEmail(false);
+    }
+
     return user._id ? (
         <div className='container-fluid mt-3'>
             <div className='row'>
@@ -400,6 +413,7 @@ export default function Profile() {
                         }
                     </div>
                     <hr/>
+                    {! user.emailConfirmed ? !sendingEmail ? <form onSubmit={resendEmail}><button type='submit' className='btn btn-warning btn-sm'>Resend Confirmation Email</button></form> : <p>Sending...</p> : null}
                     <p>Email: <span style={{display: editableContact ? 'none' : 'inline'}}>{user.email}</span>
                         <small className={user.emailConfirmed ? 'text-success' : 'text-danger'}><br />{user.emailConfirmed ? 'confirmed' : 'not confirmed'}</small>
                     </p>

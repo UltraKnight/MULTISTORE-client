@@ -155,7 +155,7 @@ export default function NavBar({loggedInUser, setCurrentUser, history}) {
                                 <>
                                 <li className="d-flex align-items-center custom-margin nav-item">
                                     <div className="me-2 nav-picture" style={{backgroundImage: `url(${loggedInUser.profile_picture})`}}></div>
-                                    <span className="me-3">Hey {loggedInUser.fullName.substr(0, loggedInUser.fullName.indexOf(' '))}</span>
+                                    <span className="me-3">Hey {loggedInUser.username}</span>
                                 </li>
                                 <li className='nav-item' id='cart'>
                                     <IconContext.Provider value={{color: 'black', size: '3rem' }}>
