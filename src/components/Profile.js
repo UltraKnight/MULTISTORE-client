@@ -276,7 +276,7 @@ export default function Profile() {
 
     //for smartphone
     const handlePostcodeOnInput = (e) => {
-        alert(JSON.stringify(e));
+        alert(e.data);
         if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             if(/^([0-9]{5}|[a-zA-Z][a-zA-Z ]{0,49})$/.test(e.nativeEvent.data) &&  e.nativeEvent.inputType !== "deleteContentBackward") {
                 e.preventDefault();
