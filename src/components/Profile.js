@@ -276,12 +276,13 @@ export default function Profile() {
 
     //for smartphone
     const handlePostcodeOnInput = (e) => {
-        alert(e.data);
+        document.querySelector('#span').innerHTML = e.nativeEvent.data;
         if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             if(/^([0-9]{5}|[a-zA-Z][a-zA-Z ]{0,49})$/.test(e.nativeEvent.data) &&  e.nativeEvent.inputType !== "deleteContentBackward") {
                 e.preventDefault();
             }
         }
+        if(e.nativeEvent) alert('exist');
     }
 
     const handleShippingClick = async () => {
@@ -439,6 +440,7 @@ export default function Profile() {
                     {editableBilling
                     ?
                         <form className='d-flex mt-3' onSubmit={(e) => handleFillBillingAddress(e, postcodeRef.current.value)}>
+                            <span id='span'></span>
                             <input onInput={handlePostcodeOnInput} onKeyDown={handlePostcodeInput} className='form-control me-2' ref={postcodeRef} type="text" placeholder='Postal Code #0000000' />
                             <button type='submit' className='btn btn-success'>Search</button>
                         </form>
