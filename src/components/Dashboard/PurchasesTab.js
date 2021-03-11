@@ -79,9 +79,11 @@ export default function SalesTab({activeTab}) {
 
     return !loading ? (
         retry ?
-        <Elements stripe={promise}>
-            <RetryForm total={selectedPurchase.total} orderId={selectedPurchase._id} retry={retry} setRetry={setRetry} setPurchases={setPurchases} setSelectedPurchase={setSelectedPurchase} />
-        </Elements>
+        <div>
+            <Elements stripe={promise}>
+                <RetryForm total={selectedPurchase.total} orderId={selectedPurchase._id} retry={retry} setRetry={setRetry} setPurchases={setPurchases} setSelectedPurchase={setSelectedPurchase} />
+            </Elements>
+        </div>
         :
         <div className={`tab-pane fade ${activeTab === 2 ? 'show active' : ''}`} id="purchases" role="tabpanel" aria-labelledby="purchases-tab">
             <div className='row'>

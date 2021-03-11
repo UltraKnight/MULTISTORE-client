@@ -173,7 +173,7 @@ export default function NavBar({loggedInUser, setCurrentUser, history}) {
                                 <li className="nav-item">
                                     <NavLink className="nav-link custom-margin" to='/login'>Login</NavLink>
                                 </li>
-                                <li className="nav-item mx-auto">
+                                <li className="nav-item">
                                     <NavLink className="nav-link" to='/signup'>Signup</NavLink>
                                 </li>
                                 </>

@@ -40,7 +40,7 @@ export default function ProductDetails({match, history}) {
     return product ? (
         <div className="container-fluid text-center">
             <div className="row">
-                <div className="col-md-6 offset-3">
+                <div className="col-md-6 offset-md-3">
                 <div className="card border-0 bg-transparent">
                     <div className="card-body">
                         <h2 className="card-title">{product.name}</h2>
