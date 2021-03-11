@@ -268,7 +268,9 @@ export default function Profile() {
     }
 
     const handlePostcodeInput = (e) => {
-        if(/^([0-9]{5}|[a-zA-Z][a-zA-Z ]{0,49})$/.test(e.code) && e.code !== 'Backspace' 
+        if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            e.target.onKeyDown = null;
+        } else if(/^([0-9]{5}|[a-zA-Z][a-zA-Z ]{0,49})$/.test(e.code) && e.code !== 'Backspace' 
             && e.code !== 'ArrowLeft' && e.code !== 'ArrowRight' && e.code !== 'Delete' && e.code !== 'Enter') {
             e.preventDefault();
         }
@@ -276,13 +278,13 @@ export default function Profile() {
 
     //for smartphone
     const handlePostcodeOnInput = (e) => {
-        document.querySelector('#span').innerHTML = e.nativeEvent.data;
         if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             if(/^([0-9]{5}|[a-zA-Z][a-zA-Z ]{0,49})$/.test(e.nativeEvent.data) &&  e.nativeEvent.inputType !== "deleteContentBackward") {
+                e.target.value += e.nativeEvent.data;
                 e.preventDefault();
+                e.stopPropagation();
             }
         }
-        if(e.nativeEvent) alert('exist');
     }
 
     const handleShippingClick = async () => {
