@@ -269,7 +269,7 @@ export default function Profile() {
 
     const handlePostcodeInput = (e) => {
         if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            e.target.onKeyDown = null;
+            e.target = null;
         } else if(/^([0-9]{5}|[a-zA-Z][a-zA-Z ]{0,49})$/.test(e.code) && e.code !== 'Backspace' 
             && e.code !== 'ArrowLeft' && e.code !== 'ArrowRight' && e.code !== 'Delete' && e.code !== 'Enter') {
             e.preventDefault();
@@ -278,9 +278,10 @@ export default function Profile() {
 
     //for smartphone
     const handlePostcodeOnInput = (e) => {
+        console.log(e.nativeEvent.data)
         if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             if(/^([0-9]{5}|[a-zA-Z][a-zA-Z ]{0,49})$/.test(e.nativeEvent.data) &&  e.nativeEvent.inputType !== "deleteContentBackward") {
-                e.target.value += e.nativeEvent.data;
+                e.target.value = e.target.value + e.nativeEvent.data;
                 e.preventDefault();
                 e.stopPropagation();
             }
@@ -442,7 +443,6 @@ export default function Profile() {
                     {editableBilling
                     ?
                         <form className='d-flex mt-3' onSubmit={(e) => handleFillBillingAddress(e, postcodeRef.current.value)}>
-                            <span id='span'></span>
                             <input onInput={handlePostcodeOnInput} onKeyDown={handlePostcodeInput} className='form-control me-2' ref={postcodeRef} type="text" placeholder='Postal Code #0000000' />
                             <button type='submit' className='btn btn-success'>Search</button>
                         </form>
