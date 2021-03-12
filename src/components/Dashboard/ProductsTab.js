@@ -88,7 +88,7 @@ export default function ProductsTab({activeTab}) {
 
             // response = await getUserProducts();
             // setMyProducts(response.data);
-            setMyProducts(...myProducts, addProductResponse.data);
+            setMyProducts([...myProducts].concat([addProductResponse.data]));
 
             e.target.reset();
             setLoading(false);
