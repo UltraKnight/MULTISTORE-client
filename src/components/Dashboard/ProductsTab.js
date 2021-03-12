@@ -83,11 +83,12 @@ export default function ProductsTab({activeTab}) {
 
             const newProduct = {name, description, category, quantity, price, image_url: response.data.fileUrl};
 
-            await addProduct(newProduct);
+            const addProductResponse = await addProduct(newProduct);
             toast.success('Product created and available in the store');
 
-            response = await getUserProducts();
-            setMyProducts(response.data);
+            // response = await getUserProducts();
+            // setMyProducts(response.data);
+            setMyProducts(...myProducts, addProductResponse.data);
 
             e.target.reset();
             setLoading(false);
