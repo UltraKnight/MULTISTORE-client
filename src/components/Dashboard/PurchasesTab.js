@@ -119,7 +119,10 @@ export default function SalesTab({activeTab}) {
                         {
                             selectedPurchase.products.map(product => {
                                 return (
+                                    <div key={product._id}>
                                     <p key={product._id}>{`${product.product.name}`} - &euro; {`${product.product.price.toFixed(2)} - quantity: ${product.quantity} - seller: ${product.seller.storeName ? product.seller.storeName : product.seller.fullName}`}</p>
+                                    <img height='100px' width='auto' src={product.product.image_url} alt={product.product.name} />
+                                    </div>
                                 )
                             })
                         }

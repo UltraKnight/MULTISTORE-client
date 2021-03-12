@@ -19,6 +19,8 @@ import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './components/Dashboard/Dashboard';
 import Checkout from './components/checkout/Checkout';
 import ConfirmEmail from './components/ConfirmEmail';
+import Footer from './components/Footer';
+
 //api
 import {loggedin} from './api';
 
@@ -53,6 +55,7 @@ export default class App extends Component {
   render() {
     const {loggedInUser} = this.state;
     return (
+      <>
       <div style={{minHeight: '100vh'}} className="App container-fluid m-0 p-0 bg-light">
         <ToastContainer />
         <Route render={(props) => {
@@ -79,6 +82,8 @@ export default class App extends Component {
           }} />
         </Switch>
       </div>
+      <Footer />
+      </>
     );
   }
 }
