@@ -64,11 +64,11 @@ export default function ProductsList({match}) {
                     </div>
                 </div>
                 <button className="carousel-control-prev" type="button" data-bs-target="#carouselHighlights"  data-bs-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="carousel-control-prev-icon" style={{backgroundColor: 'rgba(0, 0, 0, 0.3)'}} aria-hidden="true"></span>
                     <span className="visually-hidden">Previous</span>
                 </button>
                 <button className="carousel-control-next" type="button" data-bs-target="#carouselHighlights"  data-bs-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span className="carousel-control-next-icon" style={{backgroundColor: 'rgba(0, 0, 0, 0.3)'}} aria-hidden="true"></span>
                     <span className="visually-hidden">Next</span>
                 </button>
             </div>
