@@ -59,13 +59,12 @@ export default function ProductDetails({match, history}) {
     const addRateSubmit = async (e) => {
         e.preventDefault();
         const comment = commentRef.current.value;
-
-        if(!comment) {
-            toast.warning('Add a comment');
+        let rate = rateRef.current.value;
+        
+        if(!comment || !rate) {
+            toast.warning('Missing fields');
             return;
         }
-
-        let rate = rateRef.current.value;
         rate = rate > 5 ? 5 : rate < 1 ? 1 : rate;
         const createdBy = loggedInUser._id;
         const productId = product._id;
@@ -144,7 +143,7 @@ export default function ProductDetails({match, history}) {
                         <form onSubmit={addRateSubmit}>
                             <div className='mb-3'>
                                 <label className='form-label' htmlFor="prod-rate">Rate this product (1.0 to 5.0)</label>
-                                <input step='0.1' ref={rateRef} min='1' max='5' className='form-control' type="number" name='prod-rate' id='prod-rate' />
+                                <input step='0.1' ref={rateRef} min='1' max='5' className='form-control' type="number" name='prod-rate' id='prod-rate' required />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="rate-comment">Comment</label>
