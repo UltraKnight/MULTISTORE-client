@@ -6,7 +6,7 @@ export default function Footer() {
     useEffect(() => {
         const currentYear = new Date().getFullYear();
         setYear(currentYear);
-    })
+    }, []);
 
     return year ? (
         <footer class="text-light container-fluid bg-warning">
