@@ -59,7 +59,8 @@ export default function ProductDetails({match, history}) {
     const addRateSubmit = async (e) => {
         e.preventDefault();
         const comment = commentRef.current.value;
-        const rate = rateRef.current.value;
+        let rate = rateRef.current.value;
+        rate = rate > 5 ? 5 : rate < 1 ? 1 : rate;
         const createdBy = loggedInUser._id;
         const productId = product._id;
         const myRate = {comment, rate, createdBy, productId};
