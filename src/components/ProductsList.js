@@ -80,7 +80,7 @@ export default function ProductsList({match}) {
             return (
                 product.quantity > 0 ? (
                 <Link key={product._id} style={{textDecoration: 'none'}} to={`/products/${product._id}`}>
-                <div className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '380px', boxShadow: '2px 2px 6px #888888'}}>
+                <div className="card pt-3 bg-white border-0 text-center mt-2" style={{width: '20rem', height: '380px', boxShadow: '2px 2px 6px #888888'}}>
                     
                     <img
                     className="card-img-top img-fluid mx-auto"
@@ -103,7 +103,7 @@ export default function ProductsList({match}) {
                 </div>
                 </Link>
                 ) : (
-                <div key={product._id} className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '380px', boxShadow: '2px 2px 6px #888888'}}>
+                <div key={product._id} className="card pt-3 bg-white border-0 text-center mt-2" style={{width: '20rem', height: '380px', boxShadow: '2px 2px 6px #888888'}}>
                     <img
                     className="card-img-top img-fluid mx-auto"
                     src='/images/multistore-logo.png'
