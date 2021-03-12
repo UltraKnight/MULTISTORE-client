@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import  {getUserProducts, getCategories, addProduct, uploadFile, updateProduct, deleteProduct} from '../../api';
 import { toast } from 'react-toastify';
 
@@ -9,10 +9,15 @@ export default function ProductsTab({activeTab}) {
     //New product refs
     const [editingProduct, setEditingProduct] = useState(false);
     const [prodImage, setProdImage] = useState(null);
+    const [categoryFromSelect, setCategory] = useState('');
+    const nameRef = useRef();
+    const descRef = useRef();
+    const quantityRef = useRef();
+    const priceRef = useRef();
+
     const [categories, setCategories] = useState([]);
     const [myProducts, setMyProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState({});
-    const [newProduct, setNewProduct] = useState({});
     //END PRODUCTS
 
     useEffect(() => {
@@ -35,14 +40,26 @@ export default function ProductsTab({activeTab}) {
         const foundProduct = myProducts.find(item => item._id === id);
     
         setSelectedProduct(foundProduct);
-        setNewProduct(foundProduct);
+        setCategory(foundProduct.category._id);
         setProdImage(null);
         setEditingProduct(true);
+
+        nameRef.current.value = foundProduct.name;
+        descRef.current.value = foundProduct.description;
+        quantityRef.current.value = foundProduct.quantity;
+        priceRef.current.value = foundProduct.price;
+        debugger;
+
     }
 
     const handleAddProductClick = () => {
         setSelectedProduct({});
-        setNewProduct({});
+        setCategory('');
+
+        nameRef.current.value = '';
+        descRef.current.value = '';
+        quantityRef.current.value = '1';
+        priceRef.current.value = '';
 
         setProdImage(null);
         setEditingProduct(false);
@@ -52,10 +69,8 @@ export default function ProductsTab({activeTab}) {
         setProdImage(e.target.files[0]);
     }
 
-    const handleGeneralChange = (e) => {
-        const {name, value} = e.target;
-        //get all the product and change only the value of the changed field
-        setNewProduct({...newProduct, [name]: value});
+    const handleCategoryChange = (e) => {
+        setCategory(e.target.value);
     }
 
     const handleAddProductSubmit = async (e) => {
@@ -63,11 +78,11 @@ export default function ProductsTab({activeTab}) {
         setLoading(true);
 
         //name, desc, category, image_url, quantity, price
-        const name = newProduct.name;
-        const description = newProduct.description;
-        const category = newProduct.category;
-        const quantity = newProduct.quantity;
-        const price = newProduct.price;
+        const name = nameRef.current.value;
+        const description = descRef.current.value;
+        const category = categoryFromSelect;
+        const quantity = quantityRef.current.value;
+        const price = priceRef.current.value;
         
         if(!name || !category || !quantity || !price || !prodImage) {
             toast.warning('Missing fields');
@@ -102,11 +117,11 @@ export default function ProductsTab({activeTab}) {
         setLoading(true);
 
         //name, desc, category, image_url, quantity, price
-        const name = newProduct.name;
-        const description = newProduct.description;
-        const category = newProduct.category;
-        const quantity = newProduct.quantity;
-        const price = newProduct.price;
+        const name = nameRef.current.value;
+        const description = descRef.current.value;
+        const category = categoryFromSelect;
+        const quantity = quantityRef.current.value;
+        const price = priceRef.current.value;
 
         if(!name || !category || !quantity || !price) {
             toast.warning('Missing fields');
@@ -132,7 +147,7 @@ export default function ProductsTab({activeTab}) {
 
             response = await getUserProducts();
             setMyProducts(response.data);
-            setNewProduct({});
+            setCategory('');
             setLoading(false);
             setEditingProduct(false);
         } catch (error) {
@@ -204,7 +219,7 @@ export default function ProductsTab({activeTab}) {
                                 {/* name, desc, category, image_url, quantity, price */}
                                 <div className="mb-3">
                                     <label className="form-label" htmlFor="prod-name">Name</label>
-                                    <input onChange={handleGeneralChange} value={newProduct.name || ''} className="form-control" type="text" name="name" id="prod-name" required />
+                                    <input ref={nameRef} className="form-control" type="text" name="prod-name" id="prod-name" required />
                                 </div>
 
                                 <div className='mb-3'>
@@ -219,13 +234,13 @@ export default function ProductsTab({activeTab}) {
 
                                 <div className="mb-3">
                                     <label className="form-label" htmlFor="prod-desc">Description</label>
-                                    <textarea rows='10' value={newProduct.description || ''} onChange={handleGeneralChange} className="form-control" name="description" id="prod-desc" 
+                                    <textarea rows='10' ref={descRef} className="form-control" name="prod-desc" id="prod-desc" 
                                         placeholder="A nice description of your product"></textarea>
                                 </div>    
                                 
                                 <div className='mb-3'>
                                     <label className="form-label" htmlFor="category">Category</label>
-                                    <select value={newProduct.category || ''} onChange={handleGeneralChange} name='category' id='category' className="form-select" aria-label="select category">
+                                    <select value={categoryFromSelect} onChange={handleCategoryChange} id='category' className="form-select" aria-label="select category">
                                         <option disabled value=''>Select a category</option>
                                         {
                                             categories.map(category => {
@@ -239,12 +254,12 @@ export default function ProductsTab({activeTab}) {
 
                                 <div className="mb-3">
                                     <label className="form-label" htmlFor="quantity">Quantity</label>
-                                    <input onChange={handleGeneralChange} value={newProduct.quantity || ''} min='1' max='99' className="form-control" type="number" name="quantity" id="quantity" required />
+                                    <input ref={quantityRef} min='1' max='99' className="form-control" type="number" name="quantity" id="quantity" required />
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label" htmlFor="price">Price (&euro;)</label>
-                                    <input onChange={handleGeneralChange} value={newProduct.price || ''} min='1' step='0.01' className="form-control" type="number" name="price" id="price" required />
+                                    <input ref={priceRef} min='1' step='0.01' className="form-control" type="number" name="price" id="price" required />
                                 </div>
 
                                 <button type="submit" className="btn btn-outline-success border border-dark me-2">Confirm changes</button>
@@ -259,7 +274,7 @@ export default function ProductsTab({activeTab}) {
                                 {/* name, desc, category, image_url, quantity, price */}
                                 <div className="mb-3">
                                     <label className="form-label" htmlFor="prod-name-new">Name</label>
-                                    <input onChange={handleGeneralChange} value={newProduct.name || ''} className="form-control" type="text" name="name" id="prod-name-new" required />
+                                    <input ref={nameRef} className="form-control" type="text" name="prod-name" id="prod-name-new" required />
                                 </div>
 
                                 <div className='mb-3'>
@@ -269,13 +284,13 @@ export default function ProductsTab({activeTab}) {
 
                                 <div className="mb-3">
                                     <label className="form-label" htmlFor="prod-desc-new">Description</label>
-                                    <textarea value={newProduct.description || ''} onChange={handleGeneralChange} className="form-control" name="description" id="prod-desc-new" 
+                                    <textarea ref={descRef} className="form-control" name="prod-desc" id="prod-desc-new" 
                                         placeholder="A nice description of your product"></textarea>
                                 </div>    
 
                                 <div className='mb-3'>
                                     <label className="form-label" htmlFor="category-new">Category</label>
-                                    <select onChange={handleGeneralChange} value={newProduct.category} name='category' className="form-select" id="category-new" aria-label="select category">
+                                    <select value={categoryFromSelect} onChange={handleCategoryChange} className="form-select" id="category-new" aria-label="select category">
                                         <option disabled value=''>Select a category</option>
                                         {
                                             categories.map(category => {
@@ -289,12 +304,12 @@ export default function ProductsTab({activeTab}) {
 
                                 <div className="mb-3">
                                     <label className="form-label" htmlFor="quantity-new">Quantity</label>
-                                    <input onChange={handleGeneralChange} value={newProduct.quantity || ''} min='1' max='99' className="form-control" type="number" name="quantity" id="quantity-new" required />
+                                    <input ref={quantityRef} min='1' max='99' className="form-control" type="number" name="quantity" id="quantity-new" required />
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label" htmlFor="price-new">Price (&euro;)</label>
-                                    <input onChange={handleGeneralChange} value={newProduct.price || ''} min='1' step='0.01' className="form-control" type="number" name="price" id="price-new" required />
+                                    <input ref={priceRef} min='1' step='0.01' className="form-control" type="number" name="price" id="price-new" required />
                                 </div>
 
                                 <button type="submit" className="btn btn-outline-success border border-dark">Put product on sale</button>

@@ -80,20 +80,20 @@ export default function ProductsList({match}) {
             return (
                 product.quantity > 0 ? (
                 <Link key={product._id} style={{textDecoration: 'none'}} to={`/products/${product._id}`}>
-                <div className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '350px', boxShadow: '2px 2px 6px #888888'}}>
+                <div className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '380px', boxShadow: '2px 2px 6px #888888'}}>
                     
                     <img
                     className="card-img-top img-fluid mx-auto"
                     src={product.image_url}
                     alt={product.name}
-                    style={{width: '150px'}}
+                    style={{maxHeight: '150px', width: 'auto'}}
                     />
 
                     <div className="card-body">
                         <h5 className="card-title">
-                            <p>{product.name}</p>
+                            <p>{product.name.length > 80 ? `${product.name.substring(0, 80)}...` : product.name}</p>
                         </h5>
-                        <p className="card-text"><small className='text-muted'>available: {product.quantity}</small></p>
+                        <p className="card-text m-0"><small className='text-muted'>available: {product.quantity}</small></p>
                         <p className='card-text'><small className='text-muted'>From: {
                             (product.createdBy.billing.state ? product.createdBy.billing.state : 'n/a') +
                             (product.createdBy.billing.country ? ' - ' + product.createdBy.billing.country : '')
@@ -103,12 +103,12 @@ export default function ProductsList({match}) {
                 </div>
                 </Link>
                 ) : (
-                <div key={product._id} className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '350px', boxShadow: '2px 2px 6px #888888'}}>
+                <div key={product._id} className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '380px', boxShadow: '2px 2px 6px #888888'}}>
                     <img
                     className="card-img-top img-fluid mx-auto"
                     src='/images/multistore-logo.png'
                     alt=""
-                    style={{width: '150px'}}
+                    style={{maxHeight: '150px', width: 'auto'}}
                     />
                     <div className="card-body">
                         <h5 className="card-title">

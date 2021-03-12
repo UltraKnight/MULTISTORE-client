@@ -199,13 +199,13 @@ export default function SalesTab({activeTab}) {
                             <h5>Comments:</h5>
                             {
                                 selectedSale.comments.map(comment => {
-                                    return comment.to._id === user._id ? (
+                                    return comment.to._id === user._id || comment.author._id === user._id ? (
                                         <ul key={comment._id}>
                                             <li><strong>{comment.author.fullName}</strong></li>
                                             <li>{comment.comment}</li>
                                             <li>Date: {new Date(comment.date).toLocaleDateString()} - {new Date(comment.date).toLocaleTimeString()}</li>
                                         </ul>
-                                    ) : null
+                                    ) : null;
                                 })
                             }
                             <form onSubmit={handleAddCommentSubmit}>

@@ -92,7 +92,7 @@ export default function ProductDetails({match, history}) {
                         <h2 className="card-title">{product.name}</h2>
                         <img className='mt-3 mb-3' width='250px' src={product.image_url} alt={product.name} />
                         <h4>Description</h4>
-                        <p className="card-text text-start">{product.description}</p>
+                        <textarea readOnly rows='10' className="card-text text-start form-control bg-light">{product.description}</textarea>
                         <h2 className="card-title">&euro; {product.price.toFixed(2)}</h2>
 
                         <form onSubmit={handleFormSubmit}>
