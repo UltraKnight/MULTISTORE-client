@@ -162,3 +162,16 @@ export const getLatLng = (postcode) => {
 export const getAddress = (latLng) => {
     return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latLng.lat},${latLng.lng}&language=en&key=${process.env.REACT_APP_GOOGLE_API_KEY}`);
 }
+
+//REVIEWS
+export const addRate = (rate) => {
+    return axios.post(`${baseURL}/rates/add`, rate, {withCredentials: true});
+}
+
+export const getRates = (productId) => {
+    return axios.get(`${baseURL}/rates/${productId}`, {withCredentials: true});
+}
+
+export const deleteRate = (rateId) => {
+    return axios.delete(`${baseURL}/rates/${rateId}`, {withCredentials: true});
+}

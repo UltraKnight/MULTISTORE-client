@@ -78,47 +78,47 @@ export default function ProductsList({match}) {
         {
         products.map(product => {
             return (
-            <div key={product._id} className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '350px', boxShadow: '2px 2px 6px #888888'}}>
-                {product.quantity > 0 ? (
-                <>
-                <Link to={`/products/${product._id}`}>
+                product.quantity > 0 ? (
+                <Link style={{textDecoration: 'none'}} to={`/products/${product._id}`}>
+                <div key={product._id} className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '350px', boxShadow: '2px 2px 6px #888888'}}>
+                    
                     <img
                     className="card-img-top img-fluid mx-auto"
                     src={product.image_url}
                     alt={product.name}
                     style={{width: '150px'}}
                     />
+
+                    <div className="card-body">
+                        <h5 className="card-title">
+                            <p>{product.name}</p>
+                        </h5>
+                        <p className="card-text"><small className='text-muted'>available: {product.quantity}</small></p>
+                        <p className='card-text'><small className='text-muted'>From: {
+                            (product.createdBy.billing.state ? product.createdBy.billing.state : 'n/a') +
+                            (product.createdBy.billing.country ? ' - ' + product.createdBy.billing.country : '')
+                        }</small></p>
+                        <h4 className="card-text text-dark">&euro; {product.price.toFixed(2)}</h4>
+                    </div>
+                </div>
                 </Link>
-                <div className="card-body">
-                    <h5 className="card-title">
-                        <Link style={{textDecoration: 'none'}} to={`/products/${product._id}`}>{product.name}</Link>
-                    </h5>
-                    <p className="card-text"><small className='text-muted'>available: {product.quantity}</small></p>
-                    <p className='card-text'><small className='text-muted'>From: {
-                        (product.createdBy.billing.state ? product.createdBy.billing.state : 'n/a') +
-                        (product.createdBy.billing.country ? ' - ' + product.createdBy.billing.country : '')
-                    }</small></p>
-                    <h4 className="card-text">&euro; {product.price.toFixed(2)}</h4>
-                </div>
-                </>
                 ) : (
-                <>
-                <img
-                className="card-img-top img-fluid mx-auto"
-                src='/images/multistore-logo.png'
-                alt=""
-                style={{width: '150px'}}
-                />
-                <div className="card-body">
-                    <h5 className="card-title">
-                        {product.name}
-                    </h5>
-                    <p className="card-text"><small className='text-muted'>not available</small></p>
-                    <h4 className="card-text">&euro; {product.price.toFixed(2)}</h4>
+                <div key={product._id} className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '350px', boxShadow: '2px 2px 6px #888888'}}>
+                    <img
+                    className="card-img-top img-fluid mx-auto"
+                    src='/images/multistore-logo.png'
+                    alt=""
+                    style={{width: '150px'}}
+                    />
+                    <div className="card-body">
+                        <h5 className="card-title">
+                            {product.name}
+                        </h5>
+                        <p className="card-text"><small className='text-muted'>not available</small></p>
+                        <h4 className="card-text">&euro; {product.price.toFixed(2)}</h4>
+                    </div>
                 </div>
-                </>
-                )}
-            </div>
+                )
             )
         })
         }

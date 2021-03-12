@@ -1,15 +1,36 @@
-import React, {useEffect, useState} from 'react';
-import {getProduct, addToCart, loggedin} from '../api';
+import React, {useEffect, useState, useRef} from 'react';
+import {getProduct, addToCart, loggedin, getRates, addRate, deleteRate} from '../api';
 import {toast} from 'react-toastify';
 
 export default function ProductDetails({match, history}) {
     const {productId} = match.params;
-    const [product, setProduct] = useState();
+    const [product, setProduct] = useState({});
+    const [loggedInUser, setLoggedInUser] = useState({});
+    const [rates, setRates] = useState([]);
+    const [myRate, setMyRate] = useState(null);
+
+    const commentRef = useRef();
+    const rateRef = useRef();
 
     useEffect(() => {
         async function fetchData() {
-            const response = await getProduct(productId);
+            //get product
+            let response = await getProduct(productId);
             setProduct(response.data);
+
+            //get rates
+            let ratesResponse = await getRates(response.data._id);
+            setRates(ratesResponse.data);
+
+            //get user
+            let userResponse = await loggedin();
+            if(userResponse.data._id) {
+                setLoggedInUser(userResponse.data);
+
+                //get user rate if exists
+                let myRate = ratesResponse.data.find(rate => rate.createdBy._id === userResponse.data._id);
+                setMyRate(myRate);
+            }
         }
 
         fetchData();
@@ -17,8 +38,6 @@ export default function ProductDetails({match, history}) {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        let loggedInUser = await loggedin();
-        loggedInUser = loggedInUser.data;
         if(loggedInUser._id) {
             if(product.quantity > 0) {
                 const productToCart = {product: product._id, quantity: 1};
@@ -37,9 +56,36 @@ export default function ProductDetails({match, history}) {
         }
     }
 
-    return product ? (
+    const addRateSubmit = async (e) => {
+        e.preventDefault();
+        const comment = commentRef.current.value;
+        const rate = rateRef.current.value;
+        const createdBy = loggedInUser._id;
+        const productId = product._id;
+        const myRate = {comment, rate, createdBy, productId};
+
+        try {
+            const newRate = await addRate(myRate);
+            const ratesArr = rates.concat(newRate.data);
+            setRates(ratesArr);
+            setMyRate(newRate.data);
+            toast.success('Rate added to this product');
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleDeleteRate = async (id) => {
+        await deleteRate(id);
+        toast.success('Rate deleted');
+        setMyRate(null);
+        const response = await getRates(productId);
+        setRates(response.data);
+    }
+
+    return product._id ? (
         <div className="container-fluid text-center">
-            <div className="row">
+            <div className="row mb-5">
                 <div className="col-md-6 offset-md-3">
                 <div className="card border-0 bg-transparent">
                     <div className="card-body">
@@ -56,6 +102,52 @@ export default function ProductDetails({match, history}) {
                 </div>
                 </div>
             </div>
+
+            <div className='row'>
+                <div className='col-md-6 offset-md-3 rounded-3 px-2 py-3' style={{backgroundColor: 'rgba(255, 244, 199, 0.3)'}}>
+                    {rates.length ? <h3 className='text-start ms-4'>User rates for this product</h3> : null}
+                    {
+                        rates.map(rate => {
+                            return (
+                                <div key={rate._id}>
+                                    <ul className='text-start' style={{listStyleType: 'none'}}>
+                                        <li><strong>{rate.createdBy.username}</strong> - <strong>Rate: </strong>{rate.rate.toFixed(2)}</li>
+                                        <li>{rate.comment}</li>
+                                    </ul>
+                                    <hr className='mx-3' />
+                                </div>
+                            )
+                        })
+                    }
+                    {
+                        loggedInUser._id
+                        ? myRate && myRate._id ?
+                        <div className='text-start'>
+                            <div className='d-flex align-items-center'>
+                                <h3 className='ms-4 d-inline'>Your rate</h3>
+                                <button onClick={() => handleDeleteRate(myRate._id)} className='btn btn-danger btn-sm ms-4'>X</button>
+                            </div>
+                            <ul style={{listStyleType: 'none'}}>
+                                <li><strong>Rate: </strong>{myRate.rate.toFixed(2)}</li>
+                                <li>{myRate.comment}</li>
+                            </ul>
+                        </div>
+                        :
+                        <form onSubmit={addRateSubmit}>
+                            <div className='mb-3'>
+                                <label className='form-label' htmlFor="prod-rate">Rate this product (1.0 to 5.0)</label>
+                                <input step='0.1' ref={rateRef} min='1' max='5' className='form-control' type="number" name='prod-rate' id='prod-rate' />
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="rate-comment">Comment</label>
+                                <textarea style={{maxHeight: '200px'}} ref={commentRef} className="form-control" name="rate-comment" id="rate-comment" 
+                                    placeholder="A nice comment about the product"></textarea>
+                            </div>
+                            <button type='submit' className='btn btn-warning'>Add rate</button>
+                        </form>
+                    : null}
+                </div>
+            </div> 
         </div>
     ) : null
 }

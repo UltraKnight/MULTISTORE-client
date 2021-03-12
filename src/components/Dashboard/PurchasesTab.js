@@ -143,7 +143,7 @@ export default function SalesTab({activeTab}) {
                             }
                             <form onSubmit={handleAddCommentSubmit}>
                                 <div className='mb-3'>
-                                    <label className="form-label" htmlFor="seller">Comment the seller: </label>
+                                    <label className="form-label" htmlFor="seller">Comment to the seller: </label>
                                     <select value={seller} id='seller' onChange={handleSellerChange} className="form-select" aria-label="select seller">
                                         <option disabled value=''>Select the recipient</option>
                                         {
