@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { loggedin } from '../../api';
 import './Dashboard.css';
 
 //tabs
@@ -9,8 +11,19 @@ import PurchasesTab from './PurchasesTab';
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState(1);
+    const [currUser, setCurrUser] = useState({});
+    
+    useEffect(() => {
+        async function fetchData() {
+            const response = await loggedin();
+            if(response.data._id) {
+                setCurrUser(response.data);
+            }
+        }
+        fetchData();
+    }, [])
 
-    return (
+    return currUser._id && currUser.emailConfirmed ? (
         <div className='container-fluid'>
             <ul className="nav nav-tabs" id="myTab" role="tablist">
                 <li className="nav-item" role="presentation">
@@ -41,5 +54,5 @@ export default function Dashboard() {
                 {/* <div className={`tab-pane fade ${activeTab === 4 ? 'show active' : ''}`} id="categories" role="tabpanel" aria-labelledby="categories-tab"></div> */}
             </div>
         </div>
-    )
+    ) : currUser._id ? <p className='m-3'>Please, <Link to='/profile'>confirm your email</Link> before using the dashboard.</p> : null
 }

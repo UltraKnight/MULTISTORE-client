@@ -105,9 +105,9 @@ export default function ProductDetails({match, history}) {
 
             <div className='row'>
                 <div className='col-md-6 offset-md-3 rounded-3 px-2 py-3' style={{backgroundColor: 'rgba(255, 244, 199, 0.3)'}}>
-                    {rates.length ? <h3 className='text-start ms-4'>User rates for this product</h3> : null}
+                    {<h3 className='text-start ms-4'>User rates for this product</h3>}
                     {
-                        rates.map(rate => {
+                        rates.length ? rates.map(rate => {
                             return (
                                 <div key={rate._id}>
                                     <ul className='text-start' style={{listStyleType: 'none'}}>
@@ -118,6 +118,7 @@ export default function ProductDetails({match, history}) {
                                 </div>
                             )
                         })
+                        : <p className='text-start ms-4'>None</p>
                     }
                     {
                         loggedInUser._id

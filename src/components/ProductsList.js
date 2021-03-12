@@ -79,8 +79,8 @@ export default function ProductsList({match}) {
         products.map(product => {
             return (
                 product.quantity > 0 ? (
-                <Link style={{textDecoration: 'none'}} to={`/products/${product._id}`}>
-                <div key={product._id} className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '350px', boxShadow: '2px 2px 6px #888888'}}>
+                <Link key={product._id} style={{textDecoration: 'none'}} to={`/products/${product._id}`}>
+                <div className="card pt-3 bg-transparent border-0 text-center mt-2" style={{width: '20rem', height: '350px', boxShadow: '2px 2px 6px #888888'}}>
                     
                     <img
                     className="card-img-top img-fluid mx-auto"
