@@ -275,7 +275,7 @@ export default function ProductsTab({activeTab}) {
 
                                 <div className='mb-3'>
                                     <label className="form-label" htmlFor="category-new">Category</label>
-                                    <select onChange={handleGeneralChange} value={newProduct.category} name='category' className="form-select" id="category-new" aria-label="select category">
+                                    <select onChange={handleGeneralChange} value={newProduct.category || ''} name='category' className="form-select" id="category-new" aria-label="select category">
                                         <option disabled value=''>Select a category</option>
                                         {
                                             categories.map(category => {
