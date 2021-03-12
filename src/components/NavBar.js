@@ -135,7 +135,7 @@ export default function NavBar({loggedInUser, setCurrentUser, history}) {
                                                         <img width='80px' src='/images/multistore-logo.png' alt="..." />
                                                     </div>
                                                     <div className='text-wrap' style={{height: '200px', fontSize: '0.8rem', overflowY: 'hidden'}}>
-                                                        <Link style={{textDecoration: 'none'}} to={`/products/${product._id}`} className="card-title fs-5">{product.name}</Link>
+                                                        <Link style={{textDecoration: 'none'}} to={`/products/${product._id}`} className="card-title fs-5">{product.name.length > 20 ? product.name.substring(0, 20) + '...' : product.name}</Link>
                                                         <p className="card-text">{product.description.length > 180 ? product.description.substring(0, 180) + '...'
                                                             : product.description.substring(0, 180)}</p>
                                                         <p className="card-text">&euro; {product.price}</p>
