@@ -30,10 +30,10 @@ export default function Checkout() {
     return user._id ? (
         user.cart.length && user.emailConfirmed ?
         <>
-        <Review step={checkoutStep} setStep={setCheckoutStep} user={user} />
-        <ConfirmShipping step={checkoutStep} setStep={setCheckoutStep} user={user} />
-        <Payment step={checkoutStep} setStep={setCheckoutStep} user={user} setStatus={setStatus} status={status} />
-        <Finish step={checkoutStep} user={user} status={status} setStep={setCheckoutStep} />
+        {checkoutStep === 1 ?<Review step={checkoutStep} setStep={setCheckoutStep} user={user} /> : null}
+        {checkoutStep === 2 ? <ConfirmShipping step={checkoutStep} setStep={setCheckoutStep} user={user} /> : null}
+        {checkoutStep === 3 ? <Payment step={checkoutStep} setStep={setCheckoutStep} user={user} setStatus={setStatus} status={status} /> : null}
+        {checkoutStep === 4 ? <Finish step={checkoutStep} user={user} status={status} setStep={setCheckoutStep} /> : null}
         </>
         : <Redirect to='/products' />
     ) : null

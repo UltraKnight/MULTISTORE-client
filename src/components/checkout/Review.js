@@ -30,7 +30,7 @@ export default function Review({step, setStep, user}) {
                         )
                     })
                 }
-                <div>
+                <div className='mb-3'>
                     <ul style={{listStyleType: 'none', fontSize: '1.2rem'}}>
                         <li>Total: &euro; {user.cart.reduce((accumulator, curr) => accumulator + curr.quantity * curr.product.price, 0).toFixed(2)}</li>
                     </ul>

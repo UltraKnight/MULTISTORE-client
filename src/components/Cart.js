@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 export default function Cart() {
     const [user, setUser] = useState([]);
     const [canFinish, setCanFinish] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -35,9 +36,11 @@ export default function Cart() {
 
     const handleAddRemove = async (e, id, quantity, available) => {
         e.preventDefault();
+        setIsLoading(true);
 
         if(quantity === available && e.target.name === 'frmAdd') {
             toast.warning('reached the maximum available');
+            setIsLoading(false);
             return;
         }
 
@@ -63,8 +66,10 @@ export default function Cart() {
                     }
                 }
                 setCanFinish(! deletedFound);
+                setIsLoading(false);
             }
         } catch (error) {
+            setIsLoading(false);
             console.log(error);
         }
     }
@@ -98,13 +103,17 @@ export default function Cart() {
                                 {
                                     item.product && canFinish
                                     ?<div className='d-flex justify-content-center'>
-                                        <form name='frmRemoveOne' className="d-flex" onSubmit={(e) => handleAddRemove(e, item.product._id ,item.quantity, item.product.quantity)}>
-                                            <button style={{width: '30px', zIndex: '2'}} className="btn btn-outline-dark btn-sm" type='submit'>-</button>
-                                        </form>
-                                        <input className='border-0 text-center' style={{width: '50px'}} type="text" min='1' max='99' value={item.quantity} readOnly />
-                                        <form name='frmAdd' className="d-flex" onSubmit={(e) => handleAddRemove(e, item.product._id, item.quantity, item.product.quantity)}>
-                                            <button style={{width: '30px', zIndex: '2'}} className="btn btn-outline-dark btn-sm" type='submit'>+</button>
-                                        </form>
+                                        {!isLoading ? 
+                                            <>
+                                            <form name='frmRemoveOne' className="d-flex" onSubmit={(e) => handleAddRemove(e, item.product._id ,item.quantity, item.product.quantity)}>
+                                                <button style={{width: '30px', zIndex: '2'}} className="btn btn-outline-dark btn-sm" type='submit'>-</button>
+                                            </form>
+                                            <input className='border-0 text-center' style={{width: '50px'}} type="text" min='1' max='99' value={item.quantity} readOnly />
+                                            <form name='frmAdd' className="d-flex" onSubmit={(e) => handleAddRemove(e, item.product._id, item.quantity, item.product.quantity)}>
+                                                <button style={{width: '30px', zIndex: '2'}} className="btn btn-outline-dark btn-sm" type='submit'>+</button>
+                                            </form>
+                                            </>
+                                        : <span>Adding...</span>}
                                     </div>
                                     : null
                                 }
