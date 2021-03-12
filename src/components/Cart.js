@@ -48,9 +48,7 @@ export default function Cart() {
         try {
             let response = e.target.name === 'frmAdd' ? await addToCart(product) : await removeFromCart(product);
             
-            if(id !== null) {
-                e.target.name === 'frmAdd' ? toast.success('Product added') : toast.success('Product removed');
-            } else {
+            if(id === null) {
                 toast.success('The unavailable product was removed');
             }
 
@@ -113,7 +111,7 @@ export default function Cart() {
                                                 <button style={{width: '30px', zIndex: '2'}} className="btn btn-outline-dark btn-sm" type='submit'>+</button>
                                             </form>
                                             </>
-                                        : <span>Adding...</span>}
+                                        : <span>Working...</span>}
                                     </div>
                                     : null
                                 }

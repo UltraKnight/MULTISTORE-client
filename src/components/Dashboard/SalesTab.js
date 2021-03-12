@@ -114,6 +114,7 @@ export default function SalesTab({activeTab}) {
             <div className='row'>
                 <div className='col-md-3 my-3'>
                     <div className='mb-3'>
+                        <h3>Total earned: &euro; {sales.reduce((accumulator, current) => accumulator + (current.status !== 'Canceled' && current.status !== 'Pending' ? current.total : 0), 0)}</h3>
                         <button className="btn btn-sm btn-warning shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSales" aria-expanded="false" aria-controls="collapseSales">
                             My Sales
                         </button>

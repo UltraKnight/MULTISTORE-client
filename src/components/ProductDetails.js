@@ -103,7 +103,7 @@ export default function ProductDetails({match, history}) {
                         </form>
 
                         <h4>Description</h4>
-                        <textarea readOnly rows='10' className="card-text text-start form-control bg-light border-0">{product.description}</textarea>
+                        <textarea readOnly rows='10' className="card-text text-start form-control bg-light border-0" value={product.description}></textarea>
                     </div>
                 </div>
                 </div>

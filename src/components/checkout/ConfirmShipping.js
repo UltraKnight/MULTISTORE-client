@@ -45,7 +45,7 @@ export default function ConfirmShipping({step, setStep, user}) {
                     <p><strong>Country: </strong>{user.shipping.country}</p>
                 </div>
         </div>
-        <div className='row'>
+        <div className='row mb-3'>
             <div className='col-md-6 offset-md-3 col-lg-4 offset-lg-4'>
                 {
                     canContinue
