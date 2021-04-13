@@ -56,7 +56,7 @@ export default class App extends Component {
     const {loggedInUser} = this.state;
     return (
       <>
-      <div style={{minHeight: '100vh'}} className="App container-fluid m-0 p-0 bg-light">
+      <div>
         <ToastContainer />
         <Route render={(props) => {
             return <NavBar {...props} loggedInUser={loggedInUser} setCurrentUser={this.setCurrentUser} />
