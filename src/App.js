@@ -56,7 +56,7 @@ export default class App extends Component {
     const {loggedInUser} = this.state;
     return (
       <>
-      <div>
+      <main>
         <ToastContainer />
         <Route render={(props) => {
             return <NavBar {...props} loggedInUser={loggedInUser} setCurrentUser={this.setCurrentUser} />
@@ -81,7 +81,7 @@ export default class App extends Component {
               return <Signup {...props} setCurrentUser={this.setCurrentUser} l={loggedInUser} />
           }} />
         </Switch>
-      </div>
+      </main>
       <Footer />
       </>
     );

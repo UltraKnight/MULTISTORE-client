@@ -41,7 +41,7 @@ export default function ProductsList({match}) {
                 </div>
                 <div className="carousel-inner">
                     <div className="carousel-item active">
-                    <Link to={`/products/${highlights[0]._id}`}><img src={highlights[0].image_url} className="d-block w-100 mx-auto" alt={highlights[0].name} /></Link>
+                    <Link to={`/products/${highlights[0]._id}`}><img src={highlights[0].image_url} className="d-block w-50 mx-auto" alt={highlights[0].name} /></Link>
                         <div className="carousel-caption d-none d-md-block pb-3">
                             <p className='pb-0 px-3 mb-1 mx-auto rounded' style={{backgroundColor: 'rgba(0, 0, 0, 0.4)', width: 'fit-content'}}>{highlights[0].name}</p>
                             <Link to={`/products/${highlights[0]._id}`} className='btn btn-primary btn-small'>See product</Link>
@@ -49,14 +49,14 @@ export default function ProductsList({match}) {
                     </div>
 
                     <div className="carousel-item">
-                    <Link to={`/products/${highlights[1]._id}`}><img src={highlights[1].image_url} className="d-block w-100 mx-auto" alt={highlights[1].name} /></Link>
+                    <Link to={`/products/${highlights[1]._id}`}><img src={highlights[1].image_url} className="d-block w-50 h-25 mx-auto" alt={highlights[1].name} /></Link>
                         <div className="carousel-caption d-none d-md-block pb-3">
                             <p className='pb-0 px-3 mb-1 mx-auto rounded' style={{backgroundColor: 'rgba(0, 0, 0, 0.4)', width: 'fit-content'}}>{highlights[1].name}</p>
                             <Link to={`/products/${highlights[1]._id}`} className='btn btn-primary btn-small'>See product</Link>
                         </div>
                     </div>
                         <div className="carousel-item">
-                        <Link to={`/products/${highlights[2]._id}`}><img src={highlights[2].image_url} className="d-block w-100 mx-auto" alt={highlights[2].name} /></Link>
+                        <Link to={`/products/${highlights[2]._id}`}><img src={highlights[2].image_url} className="d-block w-50 h-25 mx-auto" alt={highlights[2].name} /></Link>
                         <div className="carousel-caption d-none d-md-block pb-3">
                             <p className='pb-0 px-3 mb-1 mx-auto rounded' style={{backgroundColor: 'rgba(0, 0, 0, 0.4)', width: 'fit-content'}}>{highlights[2].name}</p>
                             <Link to={`/products/${highlights[2]._id}`} className='btn btn-primary btn-small'>See product</Link>
