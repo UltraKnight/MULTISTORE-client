@@ -87,6 +87,7 @@ export default function ProductsList() {
                     className="card-img-top img-fluid mx-auto"
                     src={product.image_url}
                     alt={product.name}
+                    loading="lazy"
                     style={{maxHeight: '150px', width: 'auto'}}
                     />
 
