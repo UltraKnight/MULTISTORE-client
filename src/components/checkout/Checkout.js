@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {loggedin} from '../../api';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import ConfirmShipping from './ConfirmShipping';
 import Payment from './Payment';
 import Finish from './Finish';
@@ -35,6 +35,6 @@ export default function Checkout() {
         {checkoutStep === 3 ? <Payment step={checkoutStep} setStep={setCheckoutStep} user={user} setStatus={setStatus} status={status} /> : null}
         {checkoutStep === 4 ? <Finish step={checkoutStep} user={user} status={status} setStep={setCheckoutStep} /> : null}
         </>
-        : <Redirect to='/products' />
+        : <Navigate to='/products' />
     ) : null
 }

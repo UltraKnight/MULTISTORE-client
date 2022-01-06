@@ -3,9 +3,9 @@ import './App.scss';
 import 'bootstrap/dist/js/bootstrap.js';
 import 'react-toastify/dist/ReactToastify.css';
 
-import {ToastContainer} from 'react-toastify'
+import {ToastContainer} from 'react-toastify';
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 //components
 import NavBar from './components/NavBar';
@@ -25,17 +25,20 @@ import Footer from './components/Footer';
 import {loggedin} from './api';
 
 export default class App extends Component {
-  state = {
-    loggedInUser: null,
+  constructor(props) {
+    super(props);
+    this.state = {
+      loggedInUser: null,
+    };
+
+    this.setCurrentUser = this.setCurrentUser.bind(this);
   }
 
   //used to logout - setCurrentUser to null
   //or to login - setCurrentUser to the loggedin user
-  setCurrentUser = (user, callback) => {    
-    this.setState({
-      loggedInUser: user
-    }, callback
-  )}
+  setCurrentUser(user, callback) {    
+    this.setState({ loggedInUser: user }, callback);
+  }
 
   async componentDidMount() {
     if(this.state.loggedInUser === null) {
@@ -58,29 +61,36 @@ export default class App extends Component {
       <>
       <main>
         <ToastContainer />
-        <Route render={(props) => {
+        <Routes>
+          {/* <Route render={(props) => {
             return <NavBar {...props} loggedInUser={loggedInUser} setCurrentUser={this.setCurrentUser} />
-          }} />
-        <Switch>
-          <Route exact path='/' component={ProductsList} />
-          <Route exact path='/products/by-category/:categoryId' component={ProductsList} />
-          <Route exact path='/products/:productId' component={ProductDetails} />
-          <Route exact path='/products' component={ProductsList} />
-          <Route exact path='/confirm/:id' component={ConfirmEmail} />
-          <PrivateRoute exact path='/cart' component={Cart} />
-          <PrivateRoute exact path='/dashboard' component={Dashboard} />
-          <PrivateRoute exact path='/profile' component={Profile} />
-          <PrivateRoute exact path='/checkout' component={Checkout} />
-
-          <Route exact path='/login' render={
+          }} /> */}
+          <Route path='/' element={<NavBar loggedInUser={loggedInUser} setCurrentUser={this.setCurrentUser} />}>
+            <Route exact path='/' element={<ProductsList />}></Route>
+            <Route exact path='/products/by-category/:categoryId' element={<ProductsList />}></Route>
+            <Route exact path='/products/:productId' element={<ProductDetails />}></Route>
+            <Route exact path='/products' element={<ProductsList />}></Route>
+            <Route exact path='/confirm/:id' element={<ConfirmEmail />}></Route>
+            <Route exact path='/cart' element={<PrivateRoute />}>
+              <Route exact path='/cart' element={<Cart />}></Route>
+            </Route>
+            <Route exact path='/dashboard' element={<PrivateRoute />}>
+              <Route exact path='/dashboard' element={<Dashboard />}></Route>
+            </Route>
+            <Route exact path='/profile' element={<PrivateRoute />}>
+              <Route exact path='/profile' element={<Profile />}></Route>
+            </Route>
+            <Route exact path='/checkout' element={<PrivateRoute />}>
+              <Route exact path='/checkout' element={<Checkout />}></Route>
+            </Route>
+          {/* <Route exact path='/login' render={
             (props) => {
               return <Login {...props} setCurrentUser={this.setCurrentUser} />
-          }} />
-          <Route exact path='/signup' render={
-            (props) => {
-              return <Signup {...props} setCurrentUser={this.setCurrentUser} l={loggedInUser} />
-          }} />
-        </Switch>
+          }} /> */}
+            <Route exact path='/login' element={<Login setCurrentUser={this.setCurrentUser} />}></Route>
+            <Route exact path='/signup' element={<Signup setCurrentUser={this.setCurrentUser} l={loggedInUser} />}></Route>
+          </Route>
+        </Routes>
       </main>
       <Footer />
       </>

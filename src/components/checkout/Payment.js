@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const promise = loadStripe(process.env.REACT_APP_STRIPE_PK);
 
@@ -29,7 +29,7 @@ export default function Payment({step, setStep, user, setStatus}) {
         }
 
         fetchData();
-    }, [user.cart])
+    }, [user.cart]);
 
     return user._id && step === 3 ? (
         isPaid
@@ -45,6 +45,6 @@ export default function Payment({step, setStep, user, setStatus}) {
                 <CheckoutForm setIsPaid={setIsPaid} user={user} setStatus={setStatus} isPaid={isPaid} total={total} setStep={setStep} />
                 </Elements>
             </div>
-        : <Redirect to='/' />
+        : <Navigate to='/' />
     ) : null
 }

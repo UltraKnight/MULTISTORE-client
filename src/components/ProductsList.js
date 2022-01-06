@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import {getProducts, getProductsByCategory} from '../api';
 
 //can receive a category or query to filter the products
-export default function ProductsList({match}) {
-    const category = match.params.categoryId ? match.params.categoryId : null;
+export default function ProductsList() {
+    const params = useParams();
+    const category = params?.categoryId;
     const search = useLocation().search;
     const searchQuery = new URLSearchParams(search).get('query');
     const [products, setProducts] = React.useState([]);

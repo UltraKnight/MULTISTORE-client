@@ -2,13 +2,14 @@ import './NavBar.css';
 import React from 'react';
 import {toast} from 'react-toastify';
 import {logout, getAllCategories, getProducts} from '../api';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, Outlet, useNavigate } from 'react-router-dom';
 import { MdShoppingCart } from "react-icons/md";
 import { IconContext } from 'react-icons';
 
-export default function NavBar({loggedInUser, setCurrentUser, history}) {
+export default function NavBar({loggedInUser, setCurrentUser}) {
     const [loading, setLoading] = React.useState(false);
     const [categories, setCategories] = React.useState([]);
+    const navigate = useNavigate();
     const searchRef = React.useRef();
     const [firstThreeFromSearch, setFirstThreeFromSearch] = React.useState([]);
 
@@ -37,7 +38,7 @@ export default function NavBar({loggedInUser, setCurrentUser, history}) {
         e.preventDefault();
         const search = searchRef.current.value;
 
-        history.push(`/products?query=${search}`);
+        navigate(`/products?query=${search}`);
         searchRef.current.value = '';
         setFirstThreeFromSearch([]);
     }
@@ -183,6 +184,7 @@ export default function NavBar({loggedInUser, setCurrentUser, history}) {
                     </div>
                 </div>
             </nav>
+            <Outlet />
         </div>
     ) : null
 }

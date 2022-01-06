@@ -1,15 +1,17 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {getProduct, addToCart, loggedin, getRates, addRate, deleteRate} from '../api';
 import {toast} from 'react-toastify';
+import {useNavigate, useParams} from 'react-router-dom';
 
-export default function ProductDetails({match, history}) {
-    const {productId} = match.params;
+export default function ProductDetails() {
+    const {productId} = useParams();
     const [product, setProduct] = useState({});
     const [loggedInUser, setLoggedInUser] = useState({});
     const [rates, setRates] = useState([]);
     const [myRate, setMyRate] = useState(null);
 
     const commentRef = useRef();
+    const navigate = useNavigate();
     const rateRef = useRef();
 
     useEffect(() => {
@@ -34,7 +36,7 @@ export default function ProductDetails({match, history}) {
         }
 
         fetchData();
-    }, [productId])
+    }, [productId]);
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -52,9 +54,9 @@ export default function ProductDetails({match, history}) {
             }
         } else {
             toast.warning('log in first and enjoy shopping ');
-            history.push('/login');
+            navigate('/login');
         }
-    }
+    };
 
     const addRateSubmit = async (e) => {
         e.preventDefault();
@@ -79,7 +81,7 @@ export default function ProductDetails({match, history}) {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const handleDeleteRate = async (id) => {
         await deleteRate(id);
@@ -87,7 +89,7 @@ export default function ProductDetails({match, history}) {
         setMyRate(null);
         const response = await getRates(productId);
         setRates(response.data);
-    }
+    };
 
     return product._id ? (
         <div className="container-fluid text-center">

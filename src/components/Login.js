@@ -1,13 +1,14 @@
 import React, {useRef} from 'react';
 import {login} from '../api';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import './Login.css';
 
-export default function Login({setCurrentUser, history}) {
+export default function Login({setCurrentUser}) {
     const usernameRef = useRef();
     const passwordRef = useRef();
-    
+    const navigate = useNavigate();
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const username = usernameRef.current.value;
@@ -21,7 +22,7 @@ export default function Login({setCurrentUser, history}) {
              */
             setCurrentUser(response.data);
             toast.success('Login success');
-            history.push('/');
+            navigate('/');
         } catch (error) {
             toast.error('Invalid Login');  
         }

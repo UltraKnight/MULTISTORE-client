@@ -1,15 +1,16 @@
 import React, {useRef, useState} from 'react';
 import {login, signup} from '../api';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import './Signup.css';
 
-export default function Signup({setCurrentUser, history}) {
+export default function Signup({setCurrentUser}) {
     const [isLoading, setIsLoading] = useState(false);
     const usernameRef = useRef();
     const passwordRef = useRef();
     const nameRef = useRef();
     const emailRef = useRef();
+    const navigate = useNavigate();
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -30,7 +31,7 @@ export default function Signup({setCurrentUser, history}) {
                 await login(username, password);
                 setCurrentUser(response.data, () => {
                     toast.success('Account created');
-                    history.push('/');
+                    navigate('/');
                 });
             } else {
                 toast.error(response.data);

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Route, Redirect} from 'react-router-dom';
+import { Outlet, Navigate} from 'react-router-dom';
 import {loggedin} from '../api';
 
 //High Order Component
 export default class PrivateRoute extends Component {
-    state = {
-        isLoading: true,
-        isLoggedIn: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: true,
+            isLoggedIn: false
+        };
     }
 
     async componentDidMount() {
@@ -26,11 +29,11 @@ export default class PrivateRoute extends Component {
 
     //render a component based on the received props
     render() {
-        const {path, exact, component} = this.props;
+        // const {path, exact, component} = this.props;
         const {isLoggedIn, isLoading} = this.state;
-        
-        return isLoading ? null : isLoggedIn ? (
-            <Route path={path} component={component} exact={exact} />
-        ) : <Redirect to='/login' />
+        // return isLoading ? (<React.Fragment></React.Fragment>) : isLoggedIn ? (
+        //     <Route path={path} component={component} exact={exact} />
+        // ) : (<React.Fragment><Navigate to='/login' /></React.Fragment>)
+        return isLoading ? null : isLoggedIn ? <Outlet /> : <Navigate to='/login' />;
     }
 }

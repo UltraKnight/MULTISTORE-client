@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import './CheckoutForm.css';
 import { sellProduct, removeFromCart, addOrder } from '../../api'
 import {
@@ -139,7 +139,7 @@ export default function CheckoutForm({setIsPaid, user, setStatus, isPaid, total,
       )}
       {/* Show a success message upon completion */}
       <p className={succeeded ? "result-message" : "result-message hidden"}>
-        <Redirect to='/checkout' />
+        <Navigate to='/checkout' />
       </p>
       <hr/>
       <div className='mt-3'>
@@ -154,5 +154,5 @@ export default function CheckoutForm({setIsPaid, user, setStatus, isPaid, total,
       <p>If you don't finish your payment now, you'll able to pay later through your Dashboard</p>
     </form>
     </>
-  ) : <Redirect to='/checkout' />;
+  ) : <Navigate to='/checkout' />;
 }
