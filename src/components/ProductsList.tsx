@@ -175,17 +175,19 @@ export default function ProductsList() {
                   style={{ maxHeight: '150px', width: 'auto' }}
                 />
 
-                <div className='card-body'>
+                <div className='card-body d-flex flex-column justify-content-between'>
                   <h5 className='card-title'>
                     <p>{product.name!.length > 80 ? `${product.name!.substring(0, 80)}...` : product.name}</p>
                   </h5>
-                  <p className='card-text m-0'>
-                    <small className='text-muted'>available: {product.quantity}</small>
-                  </p>
-                  <p className='card-text'>
-                    <small className='text-muted'>From: {getProductFrom(product.createdBy)}</small>
-                  </p>
-                  <h4 className='card-text text-dark'>&euro; {product.price!.toFixed(2)}</h4>
+                  <section>
+                    <p className='card-text m-0'>
+                      <small className='text-muted'>available: {product.quantity}</small>
+                    </p>
+                    <p className='card-text'>
+                      <small className='text-muted'>From: {getProductFrom(product.createdBy)}</small>
+                    </p>
+                    <h4 className='card-text text-dark'>&euro; {product.price!.toFixed(2)}</h4>
+                  </section>
                 </div>
               </div>
             </Link>
