@@ -92,8 +92,6 @@ export default function ProductDetails({
       if (productId && createdBy) {
         const myRate = { comment, rate, createdBy, productId };
         const newRate = await addRate(myRate);
-        const ratesArr = rates.concat(newRate.data);
-        setRates(ratesArr);
         setMyRate(newRate.data);
         toast.success('Rate added to this product');
       } else {
@@ -149,11 +147,11 @@ export default function ProductDetails({
           {<h3 className='text-start ms-4'>User rates for this product</h3>}
           {rates.length ? (
             rates.map((rate) => {
-              return (
+              if (typeof rate.createdBy !== 'string') return (
                 <div key={rate._id}>
                   <ul className='text-start' style={{ listStyleType: 'none' }}>
                     <li>
-                      <strong>{typeof rate.createdBy !== 'string' ? rate.createdBy.username : 'Unknown'}</strong> -{' '}
+                      <strong>{rate.createdBy.username}</strong> -{' '}
                       <strong>Rate: </strong>
                       {rate.rate.toFixed(2)}
                     </li>
