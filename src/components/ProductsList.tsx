@@ -24,13 +24,15 @@ export default function ProductsList() {
       setProducts(response.data);
 
       if (response.data.length) {
-        const arr = [];
-        let randomProductId = 0;
-        for (let i = 1; i <= 3; i++) {
-          randomProductId = Math.floor(Math.random() * response.data.length);
-          arr.push(response.data[randomProductId]);
+        const randomIndexes: Product[] = [];
+        while (randomIndexes.length < Math.min(3, response.data.length)) {
+          const index = Math.floor(Math.random() * response.data.length);
+          if (!randomIndexes.some((i) => i === index)) {
+            randomIndexes.push({ ...response.data[index] });
+          }
         }
-        setHighlights(arr);
+
+        setHighlights(randomIndexes);
       }
     }
     fetchData();
