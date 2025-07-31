@@ -1,3 +1,5 @@
+@import 'bootstrap/scss/bootstrap';
+
 $warning: #ffb100;
 
 html {
@@ -8,8 +10,19 @@ main {
   min-height: 100vh;
 }
 
-@import '../node_modules/bootstrap/scss/bootstrap';
-
 $theme-colors: (
-  'warning': $warning
+  'warning': $warning,
 );
+
+@keyframes spin360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-infinite {
+  animation: spin360 1s linear infinite;
+}
