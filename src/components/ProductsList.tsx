@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import type { Product } from 'src/types/product';
 import type { User } from 'src/types/user';
@@ -12,6 +12,17 @@ export default function ProductsList() {
   const searchQuery = new URLSearchParams(search).get('query');
   const [products, setProducts] = useState<Product[]>([]);
   const [highlights, setHighlights] = useState<Product[]>([]);
+  const buttonRefs = useRef<HTMLButtonElement[]>([]);
+  const carouselItemsRef = useRef<HTMLDivElement[]>([]);
+  const isInitialized = useRef(false);
+
+  useEffect(() => {
+    if (!isInitialized.current && buttonRefs.current[0]) {
+      buttonRefs.current[0].classList.add('active');
+      carouselItemsRef.current[0].classList.add('active');
+      isInitialized.current = true;
+    }
+  }, [highlights]);
 
   useEffect(() => {
     async function fetchData() {
@@ -24,15 +35,18 @@ export default function ProductsList() {
       setProducts(response.data);
 
       if (response.data.length) {
-        const randomIndexes: Product[] = [];
+        const ramdomProducts: Product[] = [];
+        const randomIndexes: number[] = [];
         while (randomIndexes.length < Math.min(3, response.data.length)) {
           const index = Math.floor(Math.random() * response.data.length);
           if (!randomIndexes.some((i) => i === index)) {
-            randomIndexes.push({ ...response.data[index] });
+            randomIndexes.push(index);
           }
         }
 
-        setHighlights(randomIndexes);
+        ramdomProducts.push(...randomIndexes.map((index) => response.data[index]));
+
+        setHighlights(ramdomProducts);
       }
     }
     fetchData();
@@ -56,77 +70,45 @@ export default function ProductsList() {
           {/* carousel */}
           <div id='carouselHighlights' className='carousel slide' data-bs-ride='carousel'>
             <div className='carousel-indicators'>
-              <button
-                type='button'
-                data-bs-target='#carouselHighlights'
-                data-bs-slide-to='0'
-                className='active'
-                aria-current='true'
-                aria-label='Slide 1'
-              ></button>
-              <button
-                type='button'
-                data-bs-target='#carouselHighlights'
-                data-bs-slide-to='1'
-                aria-label='Slide 2'
-              ></button>
-              <button
-                type='button'
-                data-bs-target='#carouselHighlights'
-                data-bs-slide-to='2'
-                aria-label='Slide 3'
-              ></button>
+              {highlights.map((_, index) => (
+                <button
+                  key={index}
+                  type='button'
+                  data-bs-target='#carouselHighlights'
+                  data-bs-slide-to={index}
+                  ref={(el) => {
+                    if (el) buttonRefs.current[index] = el;
+                  }}
+                  aria-current='true'
+                  aria-label={`Slide ${index + 1}`}
+                ></button>
+              ))}
             </div>
             <div className='carousel-inner'>
-              <div className='carousel-item active'>
-                <Link to={`/products/${highlights[0]._id}`}>
-                  <img src={highlights[0].image_url} className='d-block w-50 mx-auto' alt={highlights[0].name} />
-                </Link>
-                <div className='carousel-caption d-none d-md-block pb-3'>
-                  <p
-                    className='pb-0 px-3 mb-1 mx-auto rounded'
-                    style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)', width: 'fit-content' }}
-                  >
-                    {highlights[0].name}
-                  </p>
-                  <Link to={`/products/${highlights[0]._id}`} className='btn btn-primary btn-small'>
-                    See product
+              {highlights.map((highlight, index) => (
+                <div
+                  className='carousel-item'
+                  key={index}
+                  ref={(el) => {
+                    if (el) carouselItemsRef.current.push(el);
+                  }}
+                >
+                  <Link to={`/products/${highlight._id}`}>
+                    <img src={highlight.image_url} className='d-block w-50 h-25 mx-auto' alt={highlight.name} />
                   </Link>
+                  <div className='carousel-caption d-none d-md-block pb-3'>
+                    <p
+                      className='pb-0 px-3 mb-1 mx-auto rounded'
+                      style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)', width: 'fit-content' }}
+                    >
+                      {highlight.name}
+                    </p>
+                    <Link to={`/products/${highlight._id}`} className='btn btn-primary btn-small'>
+                      See product
+                    </Link>
+                  </div>
                 </div>
-              </div>
-
-              <div className='carousel-item'>
-                <Link to={`/products/${highlights[1]._id}`}>
-                  <img src={highlights[1].image_url} className='d-block w-50 h-25 mx-auto' alt={highlights[1].name} />
-                </Link>
-                <div className='carousel-caption d-none d-md-block pb-3'>
-                  <p
-                    className='pb-0 px-3 mb-1 mx-auto rounded'
-                    style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)', width: 'fit-content' }}
-                  >
-                    {highlights[1].name}
-                  </p>
-                  <Link to={`/products/${highlights[1]._id}`} className='btn btn-primary btn-small'>
-                    See product
-                  </Link>
-                </div>
-              </div>
-              <div className='carousel-item'>
-                <Link to={`/products/${highlights[2]._id}`}>
-                  <img src={highlights[2].image_url} className='d-block w-50 h-25 mx-auto' alt={highlights[2].name} />
-                </Link>
-                <div className='carousel-caption d-none d-md-block pb-3'>
-                  <p
-                    className='pb-0 px-3 mb-1 mx-auto rounded'
-                    style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)', width: 'fit-content' }}
-                  >
-                    {highlights[2].name}
-                  </p>
-                  <Link to={`/products/${highlights[2]._id}`} className='btn btn-primary btn-small'>
-                    See product
-                  </Link>
-                </div>
-              </div>
+              ))}
             </div>
             <button
               className='carousel-control-prev'
