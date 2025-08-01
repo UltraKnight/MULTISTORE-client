@@ -10,7 +10,7 @@ export interface Order {
   products?: CartItem[];
   client?: string | User;
   orderDate?: number;
-  status?: string; // TODO: create enum
+  status?: OrderStatus;
   total?: number;
   comments?: UserComment[];
   createdAt?: string;

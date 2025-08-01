@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import type { Order } from 'src/types/order';
+import type { Order, OrderStatus } from 'src/types/order';
 import type { User } from 'src/types/user';
 import { addComment, getSales, loggedin, updateProduct, updateStatus } from '../../api';
 
@@ -12,6 +12,7 @@ export default function SalesTab({ activeTab }: { activeTab: number }) {
   const [selectedSale, setSelectedSale] = useState<Order | null>(null);
   const [status, setStatus] = useState('');
   const commentRef = useRef<HTMLTextAreaElement | null>(null);
+  const canAddComment: OrderStatus[] = ['Confirmed', 'In transit', 'Processing'];
 
   useEffect(() => {
     let isMounted = true;
@@ -333,23 +334,27 @@ export default function SalesTab({ activeTab }: { activeTab: number }) {
                       </ul>
                     ) : null;
                 })}
-                <form onSubmit={handleAddCommentSubmit}>
-                  <div className='mb-3'>
-                    <label className='form-label' htmlFor='comment'>
-                      Add a comment/answer
-                    </label>
-                    <textarea
-                      ref={commentRef}
-                      className='form-control'
-                      name='comment'
-                      id='comment'
-                      placeholder='Your message to the client... (be careful, you cannot delete the sent messages)'
-                    ></textarea>
-                  </div>
-                  <button type='submit' className='btn btn-sm btn-outline-success border border-dark me-2'>
-                    Post
-                  </button>
-                </form>
+                {canAddComment.some((item) => item === selectedSale.status) ? (
+                  <form onSubmit={handleAddCommentSubmit}>
+                    <div className='mb-3'>
+                      <label className='form-label' htmlFor='comment'>
+                        Add a comment/answer
+                      </label>
+                      <textarea
+                        ref={commentRef}
+                        className='form-control'
+                        name='comment'
+                        id='comment'
+                        placeholder='Your message to the client... (be careful, you cannot delete the sent messages)'
+                      ></textarea>
+                    </div>
+                    <button type='submit' className='btn btn-sm btn-outline-success border border-dark me-2'>
+                      Post
+                    </button>
+                  </form>
+                ) : (
+                  <span>You can't add comments to finished sales.</span>
+                )}
               </div>
             </>
           ) : null}

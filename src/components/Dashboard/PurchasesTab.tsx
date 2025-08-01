@@ -2,7 +2,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import type { Order } from 'src/types/order';
+import type { Order, OrderStatus } from 'src/types/order';
 import { addComment, getPurchases } from '../../api';
 import RetryForm from '../checkout/RetryForm';
 
@@ -15,6 +15,7 @@ export default function SalesTab({ activeTab }: { activeTab: number }) {
   const [selectedPurchase, setSelectedPurchase] = useState<Order | null>(null);
   const [seller, setSeller] = useState('');
   const commentRef = useRef<HTMLTextAreaElement | null>(null);
+  const canAddComment: OrderStatus[] = ['Confirmed', 'In transit', 'Processing'];
 
   useEffect(() => {
     let isMounted = true;
@@ -33,7 +34,7 @@ export default function SalesTab({ activeTab }: { activeTab: number }) {
     };
   }, []);
 
-  const handlePurchaseClick = (e:  React.MouseEvent<HTMLLIElement>) => {
+  const handlePurchaseClick = (e: React.MouseEvent<HTMLLIElement>) => {
     const { id } = e.currentTarget;
     const foundPurchase = purchases.find((item) => item._id === id) ?? null;
     setSelectedPurchase(foundPurchase);
@@ -206,47 +207,51 @@ export default function SalesTab({ activeTab }: { activeTab: number }) {
                         </ul>
                       );
                   })}
-                  <form onSubmit={handleAddCommentSubmit}>
-                    <div className='mb-3'>
-                      <label className='form-label' htmlFor='seller'>
-                        Comment to the seller:{' '}
-                      </label>
-                      <select
-                        value={seller}
-                        id='seller'
-                        onChange={handleSellerChange}
-                        className='form-select'
-                        aria-label='select seller'
-                      >
-                        <option disabled value=''>
-                          Select the recipient
-                        </option>
-                        {selectedPurchase.products?.map((product) => {
-                          if (typeof product.seller !== 'string')
-                            return (
-                              <option key={product.seller._id} value={product.seller._id}>
-                                {product.seller.storeName ? product.seller.storeName : product.seller.fullName}
-                              </option>
-                            );
-                        })}
-                      </select>
-                    </div>
-                    <div className='mb-3'>
-                      <label className='form-label' htmlFor='comment'>
-                        Add a comment/answer
-                      </label>
-                      <textarea
-                        ref={commentRef}
-                        className='form-control'
-                        name='comment'
-                        id='comment'
-                        placeholder='Your message to the seller... (be careful, you cannot delete the sent messages)'
-                      ></textarea>
-                    </div>
-                    <button type='submit' className='btn btn-sm btn-outline-success border border-dark me-2'>
-                      Post
-                    </button>
-                  </form>
+                  {canAddComment.some((item) => item === selectedPurchase.status) ? (
+                    <form onSubmit={handleAddCommentSubmit}>
+                      <div className='mb-3'>
+                        <label className='form-label' htmlFor='seller'>
+                          Comment to the seller:{' '}
+                        </label>
+                        <select
+                          value={seller}
+                          id='seller'
+                          onChange={handleSellerChange}
+                          className='form-select'
+                          aria-label='select seller'
+                        >
+                          <option disabled value=''>
+                            Select the recipient
+                          </option>
+                          {selectedPurchase.products?.map((product) => {
+                            if (typeof product.seller !== 'string')
+                              return (
+                                <option key={product.seller._id} value={product.seller._id}>
+                                  {product.seller.storeName ? product.seller.storeName : product.seller.fullName}
+                                </option>
+                              );
+                          })}
+                        </select>
+                      </div>
+                      <div className='mb-3'>
+                        <label className='form-label' htmlFor='comment'>
+                          Add a comment/answer
+                        </label>
+                        <textarea
+                          ref={commentRef}
+                          className='form-control'
+                          name='comment'
+                          id='comment'
+                          placeholder='Your message to the seller... (be careful, you cannot delete the sent messages)'
+                        ></textarea>
+                      </div>
+                      <button type='submit' className='btn btn-sm btn-outline-success border border-dark me-2'>
+                        Post
+                      </button>
+                    </form>
+                  ) : (
+                    <span>You can't add comments to finished purchases.</span>
+                  )}
                 </div>
               </>
             ) : null}
