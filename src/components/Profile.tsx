@@ -357,7 +357,7 @@ export default function Profile() {
       }
       setCanChangePic(false);
     } catch (error) {
-      toast.error("Failed to change profile picture");
+      toast.error('Failed to change profile picture');
       console.log(error);
     }
   };
@@ -366,7 +366,7 @@ export default function Profile() {
     setCanChangePic(true);
   };
 
-  const resendEmail = async (e:  React.FormEvent<HTMLFormElement>) => {
+  const resendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSendingEmail(true);
     try {
@@ -377,7 +377,7 @@ export default function Profile() {
       const response = await sendEmail(user.email, user._id);
       toast.success(response.data);
     } catch (error) {
-      toast.error("Failed to resend email");
+      toast.error('Failed to resend email');
       console.log(error);
     }
     setSendingEmail(false);
@@ -571,18 +571,22 @@ export default function Profile() {
             )}
           </div>
           {editableBilling ? (
-            <form className='d-flex mt-3' onSubmit={(e) => handleFillBillingAddress(e, postcodeRef.current?.value)}>
-              <input
-                onKeyDown={handlePostcodeInput}
-                className='form-control me-2'
-                ref={postcodeRef}
-                type='text'
-                placeholder='Postal Code #0000000'
-              />
-              <button type='submit' className='btn btn-success'>
-                Search
-              </button>
-            </form>
+            <>
+              <p className='text-danger mb-0'>The address search is currently unavailable.</p>
+              <p>Please, fill in the address manually.</p>
+              <form className='d-flex mt-3' onSubmit={(e) => handleFillBillingAddress(e, postcodeRef.current?.value)}>
+                <input
+                  onKeyDown={handlePostcodeInput}
+                  className='form-control me-2'
+                  ref={postcodeRef}
+                  type='text'
+                  placeholder='Postal Code #0000000'
+                />
+                <button disabled type='submit' className='btn btn-success'>
+                  Search
+                </button>
+              </form>
+            </>
           ) : null}
           <hr />
           <p>
@@ -741,18 +745,22 @@ export default function Profile() {
             )}
           </div>
           {editableShipping ? (
-            <form className='d-flex mt-3' onSubmit={(e) => handleFillShippingAddress(e, postcodeRef.current?.value)}>
-              <input
-                onKeyDown={handlePostcodeInput}
-                className='form-control me-2'
-                ref={postcodeRef}
-                type='text'
-                placeholder='Postal Code #0000000'
-              />
-              <button type='submit' className='btn btn-success'>
-                Search
-              </button>
-            </form>
+            <>
+              <p className='text-danger mb-0'>The address search is currently unavailable.</p>
+              <p>Please, fill in the address manually.</p>
+              <form className='d-flex mt-3' onSubmit={(e) => handleFillShippingAddress(e, postcodeRef.current?.value)}>
+                <input
+                  onKeyDown={handlePostcodeInput}
+                  className='form-control me-2'
+                  ref={postcodeRef}
+                  type='text'
+                  placeholder='Postal Code #0000000'
+                />
+                <button disabled type='submit' className='btn btn-success'>
+                  Search
+                </button>
+              </form>
+            </>
           ) : null}
           <hr />
           <p>
