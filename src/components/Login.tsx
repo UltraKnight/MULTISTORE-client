@@ -1,4 +1,5 @@
-import React, { useRef } from 'react';
+import { isAxiosError } from 'axios';
+import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { User } from 'src/types/user';
@@ -8,10 +9,12 @@ import './Login.css';
 export default function Login({ setCurrentUser }: { setCurrentUser: (user: User) => void }) {
   const usernameRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     const username = usernameRef.current!.value;
     const password = passwordRef.current!.value;
 
@@ -25,8 +28,14 @@ export default function Login({ setCurrentUser }: { setCurrentUser: (user: User)
       toast.success('Login success');
       navigate('/');
     } catch (error) {
-      console.error(error);
+      if (isAxiosError(error) && error.response?.status === 429) {
+        toast.error('Too many requests, try again later');
+        return;
+      }
+
       toast.error('Invalid Login');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,7 +62,7 @@ export default function Login({ setCurrentUser }: { setCurrentUser: (user: User)
             <input className='form-control' type='password' name='password' id='password' ref={passwordRef} required />
           </div>
 
-          <button type='submit' className='btn btn-warning border border-dark'>
+          <button type='submit' className='btn btn-warning border border-dark' disabled={isLoading}>
             Login
           </button>
           <span className='float-end'>
