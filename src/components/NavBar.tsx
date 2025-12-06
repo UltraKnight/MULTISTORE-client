@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { IconContext } from 'react-icons';
 import { MdShoppingCart } from 'react-icons/md';
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { Category } from 'src/types/category';
 import type { Product } from 'src/types/product';
@@ -16,6 +16,7 @@ type NavBarProps = {
 };
 
 export default function NavBar({ loggedInUser, setCurrentUser, basketQuantity }: NavBarProps) {
+  const params = useParams();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const navigate = useNavigate();
@@ -108,7 +109,7 @@ export default function NavBar({ loggedInUser, setCurrentUser, basketQuantity }:
                         categories.map((category) => {
                           return (
                             <li key={category._id}>
-                              <NavLink className='dropdown-item' to={`/products/by-category/${category._id}`}>
+                              <NavLink className={`${params?.categoryId === category._id ? 'active' : ''} dropdown-item`} to={`/products/by-category/${category._id}`}>
                                 {category.name}
                               </NavLink>
                             </li>
