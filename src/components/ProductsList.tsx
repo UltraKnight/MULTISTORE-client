@@ -4,7 +4,7 @@ import type { Product } from 'src/types/product';
 import type { User } from 'src/types/user';
 import { getProducts, getProductsByCategory } from '../api';
 
-//can receive a category or query to filter the products
+// can receive a category or query to filter the products
 export default function ProductsList() {
   const params = useParams();
   const category = params?.categoryId;
@@ -14,15 +14,6 @@ export default function ProductsList() {
   const [highlights, setHighlights] = useState<Product[]>([]);
   const buttonRefs = useRef<HTMLButtonElement[]>([]);
   const carouselItemsRef = useRef<HTMLDivElement[]>([]);
-  const isInitialized = useRef(false);
-
-  useEffect(() => {
-    if (!isInitialized.current && buttonRefs.current[0]) {
-      buttonRefs.current[0].classList.add('active');
-      carouselItemsRef.current[0].classList.add('active');
-      isInitialized.current = true;
-    }
-  }, [highlights]);
 
   useEffect(() => {
     async function fetchData() {
@@ -35,18 +26,16 @@ export default function ProductsList() {
       setProducts(response.data);
 
       if (response.data.length) {
-        const ramdomProducts: Product[] = [];
+        const randomProducts: Product[] = [];
         const randomIndexes: number[] = [];
         while (randomIndexes.length < Math.min(3, response.data.length)) {
           const index = Math.floor(Math.random() * response.data.length);
-          if (!randomIndexes.some((i) => i === index)) {
+          if (!randomIndexes.includes(index)) {
             randomIndexes.push(index);
           }
         }
-
-        ramdomProducts.push(...randomIndexes.map((index) => response.data[index]));
-
-        setHighlights(ramdomProducts);
+        randomProducts.push(...randomIndexes.map((index) => response.data[index]));
+        setHighlights(randomProducts);
       }
     }
     fetchData();
@@ -59,51 +48,55 @@ export default function ProductsList() {
       const country = createdBy?.billing?.country ? createdBy.billing.country : '';
       result = `${state} - ${country}`;
     }
-
     return result;
   };
 
   return products.length ? (
     <>
       {highlights.length ? (
-        <div className='col-md-6 offset-md-3'>
+        <div className="col-md-6 offset-md-3">
           {/* carousel */}
-          <div id='carouselHighlights' className='carousel slide' data-bs-ride='carousel'>
-            <div className='carousel-indicators'>
+          <div id="carouselHighlights" className="carousel slide" data-bs-ride="carousel">
+            <div className="carousel-indicators">
               {highlights.map((_, index) => (
                 <button
                   key={index}
-                  type='button'
-                  data-bs-target='#carouselHighlights'
+                  type="button"
+                  data-bs-target="#carouselHighlights"
                   data-bs-slide-to={index}
+                  className={index === 0 ? 'active' : ''}
+                  aria-current={index === 0 ? 'true' : undefined}
+                  aria-label={`Slide ${index + 1}`}
                   ref={(el) => {
                     if (el) buttonRefs.current[index] = el;
                   }}
-                  aria-current='true'
-                  aria-label={`Slide ${index + 1}`}
                 ></button>
               ))}
             </div>
-            <div className='carousel-inner'>
+            <div className="carousel-inner">
               {highlights.map((highlight, index) => (
                 <div
-                  className='carousel-item'
+                  className={`carousel-item ${index === 0 ? 'active' : ''}`}
                   key={index}
                   ref={(el) => {
-                    if (el) carouselItemsRef.current.push(el);
+                    if (el) carouselItemsRef.current[index] = el;
                   }}
                 >
                   <Link to={`/products/${highlight._id}`}>
-                    <img src={highlight.image_url} className='d-block w-50 h-25 mx-auto' alt={highlight.name} />
+                    <img
+                      src={highlight.image_url}
+                      className="d-block w-50 h-25 mx-auto"
+                      alt={highlight.name}
+                    />
                   </Link>
-                  <div className='carousel-caption d-none d-md-block pb-3'>
+                  <div className="carousel-caption d-none d-md-block pb-3">
                     <p
-                      className='pb-0 px-3 mb-1 mx-auto rounded'
+                      className="pb-0 px-3 mb-1 mx-auto rounded"
                       style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)', width: 'fit-content' }}
                     >
                       {highlight.name}
                     </p>
-                    <Link to={`/products/${highlight._id}`} className='btn btn-primary btn-small'>
+                    <Link to={`/products/${highlight._id}`} className="btn btn-primary btn-small">
                       See product
                     </Link>
                   </div>
@@ -111,66 +104,65 @@ export default function ProductsList() {
               ))}
             </div>
             <button
-              className='carousel-control-prev'
-              type='button'
-              data-bs-target='#carouselHighlights'
-              data-bs-slide='prev'
+              className="carousel-control-prev"
+              type="button"
+              data-bs-target="#carouselHighlights"
+              data-bs-slide="prev"
             >
               <span
-                className='carousel-control-prev-icon'
+                className="carousel-control-prev-icon"
                 style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
-                aria-hidden='true'
+                aria-hidden="true"
               ></span>
-              <span className='visually-hidden'>Previous</span>
+              <span className="visually-hidden">Previous</span>
             </button>
             <button
-              className='carousel-control-next'
-              type='button'
-              data-bs-target='#carouselHighlights'
-              data-bs-slide='next'
+              className="carousel-control-next"
+              type="button"
+              data-bs-target="#carouselHighlights"
+              data-bs-slide="next"
             >
               <span
-                className='carousel-control-next-icon'
+                className="carousel-control-next-icon"
                 style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
-                aria-hidden='true'
+                aria-hidden="true"
               ></span>
-              <span className='visually-hidden'>Next</span>
+              <span className="visually-hidden">Next</span>
             </button>
           </div>
         </div>
       ) : null}
-      {/* <div className='container-fluid d-flex flex-wrap justify-content-start pb-3 gap-5'> */}
+
       <div
-        className='d-grid gap-4 py-3 justify-content-center'
+        className="d-grid gap-4 py-3 justify-content-center"
         style={{ gridTemplateColumns: 'repeat(auto-fit, minMax(20rem, max-content))', maxWidth: '100vw' }}
       >
         {products.map((product) => {
           return product.quantity! > 0 ? (
             <Link key={product._id} style={{ textDecoration: 'none' }} to={`/products/${product._id}`}>
               <div
-                className='card pt-3 bg-white border-0 text-center mt-2'
+                className="card pt-3 bg-white border-0 text-center mt-2"
                 style={{ width: '20rem', height: '380px', boxShadow: '2px 2px 6px #888888' }}
               >
                 <img
-                  className='card-img-top img-fluid mx-auto'
+                  className="card-img-top img-fluid mx-auto"
                   src={product.image_url}
                   alt={product.name}
-                  loading='lazy'
+                  loading="lazy"
                   style={{ maxHeight: '150px', width: 'auto' }}
                 />
-
-                <div className='card-body d-flex flex-column justify-content-between'>
-                  <h5 className='card-title'>
+                <div className="card-body d-flex flex-column justify-content-between">
+                  <h5 className="card-title">
                     <p>{product.name!.length > 80 ? `${product.name!.substring(0, 80)}...` : product.name}</p>
                   </h5>
                   <section>
-                    <p className='card-text m-0'>
-                      <small className='text-muted'>available: {product.quantity}</small>
+                    <p className="card-text m-0">
+                      <small className="text-muted">available: {product.quantity}</small>
                     </p>
-                    <p className='card-text'>
-                      <small className='text-muted'>From: {getProductFrom(product.createdBy)}</small>
+                    <p className="card-text">
+                      <small className="text-muted">From: {getProductFrom(product.createdBy)}</small>
                     </p>
-                    <h4 className='card-text text-dark'>&euro; {product.price!.toFixed(2)}</h4>
+                    <h4 className="card-text text-dark">&euro; {product.price!.toFixed(2)}</h4>
                   </section>
                 </div>
               </div>
@@ -178,26 +170,30 @@ export default function ProductsList() {
           ) : (
             <div
               key={product._id}
-              className='card pt-3 bg-white border-0 text-center mt-2'
+              className="card pt-3 bg-white border-0 text-center mt-2"
               style={{ width: '20rem', height: '380px', boxShadow: '2px 2px 6px #888888' }}
             >
               <img
-                className='card-img-top img-fluid mx-auto'
-                src='/images/multistore-logo.png'
-                alt=''
+                className="card-img-top img-fluid mx-auto"
+                src="/images/multistore-logo.png"
+                alt=""
                 style={{ maxHeight: '150px', width: 'auto' }}
               />
-              <div className='card-body'>
-                <h5 className='card-title'>{product.name}</h5>
-                <p className='card-text'>
-                  <small className='text-muted'>not available</small>
+              <div className="card-body">
+                <h5 className="card-title">{product.name}</h5>
+                <p className="card-text">
+                  <small className="text-muted">not available</small>
                 </p>
-                <h4 className='card-text'>&euro; {product.price!.toFixed(2)}</h4>
+                <h4 className="card-text">&euro; {product.price!.toFixed(2)}</h4>
               </div>
             </div>
           );
         })}
       </div>
     </>
-  ) : null;
+  ) : (
+    <p className="m-3">
+      No products found for this category. Go back to <Link to="/">Home</Link>
+    </p>
+  );
 }
