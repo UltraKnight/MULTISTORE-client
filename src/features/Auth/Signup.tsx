@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { UserSetter } from 'src/App';
-import { login, signup } from '../api';
+import { login, signup } from '../../api';
 import './Signup.css';
 
 type SignupProps = {

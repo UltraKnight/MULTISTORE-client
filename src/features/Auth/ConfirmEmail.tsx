@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { confirmEmail } from '../api';
+import { confirmEmail } from '../../api';
 
 export default function ConfirmEmail() {
   const [confirming, setConfirming] = useState(true);

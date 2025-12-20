@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import type { Order, OrderStatus } from 'src/types/order';
 import { addComment, getPurchases } from '../../api';
-import RetryForm from '../checkout/RetryForm';
+import RetryForm from '../Checkout/RetryForm';
 
 const promise = loadStripe(import.meta.env.REACT_APP_STRIPE_PK);
 

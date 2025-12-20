@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import type { Product } from 'src/types/product';
 import type { Rate } from 'src/types/review';
 import type { User } from 'src/types/user';
-import { addRate, addToCart, deleteRate, getProduct, getRates, loggedin } from '../api';
+import { addRate, addToCart, deleteRate, getProduct, getRates, loggedin } from '../../api';
 
 export default function ProductDetails({
   setBasketQuantity,
@@ -147,19 +147,19 @@ export default function ProductDetails({
           {<h3 className='text-start ms-4'>User rates for this product</h3>}
           {rates.length ? (
             rates.map((rate) => {
-              if (typeof rate.createdBy !== 'string') return (
-                <div key={rate._id}>
-                  <ul className='text-start' style={{ listStyleType: 'none' }}>
-                    <li>
-                      <strong>{rate.createdBy.username}</strong> -{' '}
-                      <strong>Rate: </strong>
-                      {rate.rate.toFixed(2)}
-                    </li>
-                    <li>{rate.comment}</li>
-                  </ul>
-                  <hr className='mx-3' />
-                </div>
-              );
+              if (typeof rate.createdBy !== 'string')
+                return (
+                  <div key={rate._id}>
+                    <ul className='text-start' style={{ listStyleType: 'none' }}>
+                      <li>
+                        <strong>{rate.createdBy.username}</strong> - <strong>Rate: </strong>
+                        {rate.rate.toFixed(2)}
+                      </li>
+                      <li>{rate.comment}</li>
+                    </ul>
+                    <hr className='mx-3' />
+                  </div>
+                );
             })
           ) : (
             <p className='text-start ms-4'>None</p>

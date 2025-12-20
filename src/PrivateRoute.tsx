@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { loggedin } from '../api';
+import { loggedin } from './api';
 
 //High Order Component
 export default function PrivateRoute() {

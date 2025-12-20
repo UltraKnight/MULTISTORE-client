@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FiEdit, FiSave, FiX } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import type { User } from 'src/types/user';
-import { getAddress, getLatLng, loggedin, sendEmail, updateEmail, updateProfile, uploadFile } from '../api';
+import { getAddress, getLatLng, loggedin, sendEmail, updateEmail, updateProfile, uploadFile } from '../../api';
 import './Profile.css';
 
 export default function Profile() {

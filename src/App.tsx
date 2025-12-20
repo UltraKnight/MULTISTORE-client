@@ -8,18 +8,18 @@ import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 //components
-import Cart from './components/Cart';
-import Checkout from './components/checkout/Checkout';
-import ConfirmEmail from './components/ConfirmEmail';
-import Dashboard from './components/Dashboard/Dashboard';
-import Footer from './components/Footer';
-import Login from './components/Login';
-import NavBar from './components/NavBar';
-import PrivateRoute from './components/PrivateRoute';
-import ProductDetails from './components/ProductDetails';
-import ProductsList from './components/ProductsList';
-import Profile from './components/Profile';
-import Signup from './components/Signup';
+import Cart from './features/Cart/Cart';
+import Checkout from './features/Checkout/Checkout';
+import ConfirmEmail from './features/Auth/ConfirmEmail';
+import Dashboard from './features/Dashboard/Dashboard';
+import Footer from './features/App/Footer';
+import Login from './features/Auth/Login';
+import NavBar from './features/Navigation/NavBar';
+import PrivateRoute from './PrivateRoute';
+import ProductDetails from './features/Catalog/ProductDetails';
+import ProductsList from './features/Catalog/ProductsList';
+import Profile from './features/UserProfile/Profile';
+import Signup from './features/Auth/Signup';
 
 //api
 import { loggedin } from './api';
@@ -91,10 +91,18 @@ export default function App() {
       <main>
         <ToastContainer />
         <Routes>
-          <Route path='/' element={<NavBar loggedInUser={loggedInUser} setCurrentUser={setCurrentUser} basketQuantity={basketQuantity} />}>
+          <Route
+            path='/'
+            element={
+              <NavBar loggedInUser={loggedInUser} setCurrentUser={setCurrentUser} basketQuantity={basketQuantity} />
+            }
+          >
             <Route path='/' element={<ProductsList />}></Route>
             <Route path='/products/by-category/:categoryId' element={<ProductsList />}></Route>
-            <Route path='/products/:productId' element={<ProductDetails setBasketQuantity={setBasketQuantity} />}></Route>
+            <Route
+              path='/products/:productId'
+              element={<ProductDetails setBasketQuantity={setBasketQuantity} />}
+            ></Route>
             <Route path='/products' element={<ProductsList />}></Route>
             <Route path='/confirm/:id' element={<ConfirmEmail />}></Route>
             <Route path='/cart' element={<PrivateRoute />}>

@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { User } from 'src/types/user';
-import { login } from '../api';
+import { login } from '../../api';
 import './Login.css';
 
 export default function Login({ setCurrentUser }: { setCurrentUser: (user: User) => void }) {

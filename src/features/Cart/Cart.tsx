@@ -3,7 +3,7 @@ import { FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { User } from 'src/types/user';
-import { addToCart, loggedin, removeFromCart } from '../api';
+import { addToCart, loggedin, removeFromCart } from '../../api';
 
 export default function Cart({
   setBasketQuantity,
@@ -125,15 +125,13 @@ export default function Cart({
                           className='d-flex'
                           onSubmit={(e) => handleAddRemove(e, item.product._id!, item.quantity, item.product.quantity)}
                         >
-                          
-                            <button
-                              style={{ width: '30px', height: '30px', zIndex: '2' }}
-                              className='btn btn-outline-dark btn-sm d-flex justify-content-center align-items-center'
-                              type='submit'
-                            >
-                              {isLoading ? <FaSpinner className="spin-infinite" /> : '-'}
-                            </button>
-                          
+                          <button
+                            style={{ width: '30px', height: '30px', zIndex: '2' }}
+                            className='btn btn-outline-dark btn-sm d-flex justify-content-center align-items-center'
+                            type='submit'
+                          >
+                            {isLoading ? <FaSpinner className='spin-infinite' /> : '-'}
+                          </button>
                         </form>
                         <input
                           className='border-0 text-center'
@@ -154,7 +152,7 @@ export default function Cart({
                             className='btn btn-outline-dark btn-sm d-flex justify-content-center align-items-center'
                             type='submit'
                           >
-                            {isLoading ? <FaSpinner className="spin-infinite" /> : '+'}
+                            {isLoading ? <FaSpinner className='spin-infinite' /> : '+'}
                           </button>
                         </form>
                       </>

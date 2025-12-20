@@ -1,13 +1,14 @@
 import React, { useRef, useState } from 'react';
 import { IconContext } from 'react-icons';
 import { MdShoppingCart } from 'react-icons/md';
-import { Link, NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { Category } from 'src/types/category';
 import type { Product } from 'src/types/product';
 import type { User } from 'src/types/user';
-import { getAllCategories, getProducts, logout } from '../api';
+import { getAllCategories, getProducts, logout } from '../../api';
 import './NavBar.css';
+import Breadcrumbs from './Breadcrumbs';
 
 type NavBarProps = {
   loggedInUser: User | null;
@@ -20,6 +21,8 @@ export default function NavBar({ loggedInUser, setCurrentUser, basketQuantity }:
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
   const searchRef = useRef<HTMLInputElement>(null);
   const [firstThreeFromSearch, setFirstThreeFromSearch] = useState<Product[]>([]);
 
@@ -109,7 +112,10 @@ export default function NavBar({ loggedInUser, setCurrentUser, basketQuantity }:
                         categories.map((category) => {
                           return (
                             <li key={category._id}>
-                              <NavLink className={`${params?.categoryId === category._id ? 'active' : ''} dropdown-item`} to={`/products/by-category/${category._id}`}>
+                              <NavLink
+                                className={`${params?.categoryId === category._id ? 'active' : ''} dropdown-item`}
+                                to={`/products/by-category/${category._id}`}
+                              >
                                 {category.name}
                               </NavLink>
                             </li>
@@ -282,6 +288,7 @@ export default function NavBar({ loggedInUser, setCurrentUser, basketQuantity }:
           </div>
         </div>
       </nav>
+      {!isHomePage && <Breadcrumbs categories={categories} />}
       <Outlet />
     </div>
   ) : null;
