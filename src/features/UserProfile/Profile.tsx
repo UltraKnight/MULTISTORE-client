@@ -129,7 +129,7 @@ export default function Profile() {
     }
   };
 
-  const handleContactClick = async () => {
+  const handleContactClick = () => {
     if (!editableContact) {
       setEditableContact(true);
       if (emailRef.current && user.email) emailRef.current.value = user.email;
@@ -363,7 +363,7 @@ export default function Profile() {
   };
 
   const handleCanChangePic = () => {
-    setCanChangePic(true);
+    setCanChangePic((prev) => !prev);
   };
 
   const resendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -388,15 +388,20 @@ export default function Profile() {
       <div className='row'>
         <div className='col-lg-2 offset-lg-1 col-md-2 text-center'>
           <div className='me-2 picture' style={{ backgroundImage: `url(${user.profile_picture})` }}></div>
-          <div className='mt-3'>
+          <div className='mt-3 d-flex justify-content-center'>
             {canChangePic ? (
-              <input
-                onChange={handleChangePicture}
-                className='form-control form-control-sm'
-                type='file'
-                name='profile-pic'
-                id='profile-pic'
-              />
+              <>
+                <input
+                  onChange={handleChangePicture}
+                  className='form-control form-control-sm'
+                  type='file'
+                  name='profile-pic'
+                  id='profile-pic'
+                />
+                <button onClick={handleCanChangePic} className='btn btn-warning btn-sm'>
+                  X
+                </button>
+              </>
             ) : (
               <button onClick={handleCanChangePic} className='btn btn-warning btn-sm'>
                 Change Picture
