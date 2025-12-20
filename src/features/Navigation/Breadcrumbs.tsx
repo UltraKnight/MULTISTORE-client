@@ -11,7 +11,11 @@ export default function Breadcrumbs({ categories }: { categories?: Category[] })
   const rawSegments = pathname.split('/').filter(Boolean);
   const segmentsToShow = rawSegments
     .filter((seg) => !ignoredSegments.has(seg)) // remove ignored
-    .map((seg) => categoryMap.get(seg) || seg) // replace category IDs with names
+    .map((seg) => {
+      const result = categoryMap.get(seg) || seg; // replace category IDs with names
+      const capitalizedSeg = result.charAt(0).toUpperCase() + result.slice(1);
+      return capitalizedSeg;
+    })
     .filter((seg) => !Object.values(params).includes(seg)); // remove params
 
   const crumbs = segmentsToShow.map((seg, index) => {
