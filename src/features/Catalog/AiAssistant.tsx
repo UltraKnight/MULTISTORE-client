@@ -192,8 +192,10 @@ export default function AiAssistant({ products }: AiAssistantProps) {
         type='button'
         className='btn btn-primary ai-assistant-toggle'
         onClick={() => setOpen((current) => !current)}
+        aria-label={open ? 'Fechar assistente de compras' : 'Abrir assistente de compras'}
       >
-        {open ? 'Close AI Assistant' : 'AI Shopping Assistant'}
+        <span className='ai-assistant-toggle-icon'>{open ? 'X' : '💬'}</span>
+        <span className='ai-assistant-toggle-text'>{open ? 'Close AI Assistant' : 'AI Shopping Assistant'}</span>
       </button>
 
       {open ? (
@@ -251,13 +253,44 @@ export default function AiAssistant({ products }: AiAssistantProps) {
           z-index: 1050;
           width: min(360px, calc(100vw - 1.5rem));
           max-width: 360px;
+          text-align: right;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
         .ai-assistant-toggle {
-          width: 100%;
+          width: auto;
+          max-width: 100%;
           box-shadow: 0 0 18px rgba(0, 0, 0, 0.18);
           font-size: 0.9rem;
+          padding: 0.55rem 0.75rem;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        .ai-assistant-toggle-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+
+        .ai-assistant-toggle-text {
+          white-space: nowrap;
+        }
+
+        @media (max-width: 576px) {
+          .ai-assistant-toggle {
+            padding: 0.35rem 0.45rem;
+            margin-bottom: 1.2rem;
+            min-width: 2.4rem;
+          }
+
+          .ai-assistant-toggle-text {
+            display: none;
+          }
         }
 
         .ai-assistant-card {
