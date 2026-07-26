@@ -249,6 +249,7 @@ export default function AiAssistant({ products }: AiAssistantProps) {
           right: 1rem;
           bottom: 1rem;
           z-index: 1050;
+          width: min(360px, calc(100vw - 1.5rem));
           max-width: 360px;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
@@ -263,20 +264,26 @@ export default function AiAssistant({ products }: AiAssistantProps) {
           margin-top: 0.75rem;
           box-shadow: 0 0 26px rgba(0, 0, 0, 0.2);
           border: none;
+          max-height: min(72vh, 480px);
+          overflow: hidden;
         }
 
         .ai-assistant-card .card-body {
           padding: 1rem;
           font-size: 0.85rem;
+          display: flex;
+          flex-direction: column;
+          max-height: 100%;
         }
 
         .ai-messages {
-          max-height: 400px;
+          max-height: min(40vh, 280px);
           overflow-y: auto;
           border: 1px solid #e0e0e0;
           border-radius: 0.4rem;
           padding: 0.75rem;
           background: #fafafa;
+          flex: 1 1 auto;
         }
 
         .ai-message {
