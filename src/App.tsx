@@ -115,7 +115,7 @@ export default function App() {
               <Route path='/profile' element={<Profile />}></Route>
             </Route>
             <Route path='/checkout' element={<PrivateRoute />}>
-              <Route path='/checkout' element={<Checkout />}></Route>
+              <Route path='/checkout' element={<Checkout setBasketQuantity={setBasketQuantity} />}></Route>
             </Route>
             <Route path='/login' element={<Login setCurrentUser={setCurrentUser} />}></Route>
             <Route path='/signup' element={<Signup setCurrentUser={setCurrentUser} />}></Route>

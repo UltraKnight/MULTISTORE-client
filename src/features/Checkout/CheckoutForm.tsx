@@ -16,9 +16,18 @@ type CheckoutFormProps = {
   setStatus: (status: OrderStatus) => void;
   total: number;
   setStep: (step: number) => void;
+  setBasketQuantity: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export default function CheckoutForm({ setIsPaid, user, setStatus, isPaid, total, setStep }: CheckoutFormProps) {
+export default function CheckoutForm({
+  setIsPaid,
+  user,
+  setStatus,
+  isPaid,
+  total,
+  setStep,
+  setBasketQuantity,
+}: CheckoutFormProps) {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState<boolean>(false);
@@ -65,14 +74,12 @@ export default function CheckoutForm({ setIsPaid, user, setStatus, isPaid, total
   };
 
   const finishCheckout = async (status: 'Pending' | 'Confirmed') => {
-    user.cart!.forEach(async (item) => {
-      const product = { product: item.product._id!, quantity: 0 };
+    for (const item of user.cart ?? []) {
       await sellProduct({ quantity: item.quantity }, item.product._id!);
-      await removeFromCart(product);
-    });
+      await removeFromCart({ product: item.product._id!, quantity: 0 });
+    }
 
     //create order - {[products(product, quantity, seller)], total, client, orderDate (auto), status (Confirmed)}
-    //await addOrder(order);
     const products: CartItem[] = [];
     user.cart?.forEach((item) => {
       if (typeof item?.product.createdBy !== 'string') {
@@ -83,6 +90,10 @@ export default function CheckoutForm({ setIsPaid, user, setStatus, isPaid, total
     });
     const order = { products: products, total: total, client: user._id, orderDate: Date.now(), status: status };
     await addOrder(order);
+
+    if (status === 'Confirmed') {
+      setBasketQuantity(0);
+    }
 
     setStep(4);
   };

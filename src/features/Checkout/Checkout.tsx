@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 import { Navigate } from 'react-router-dom';
 import type { User } from 'src/types/user';
 import { loggedin } from '../../api';
@@ -7,7 +7,11 @@ import Finish from './Finish';
 import Payment from './Payment';
 import Review from './Review';
 
-export default function Checkout() {
+type CheckoutProps = {
+  setBasketQuantity: Dispatch<SetStateAction<number>>;
+};
+
+export default function Checkout({ setBasketQuantity }: CheckoutProps) {
   const [user, setUser] = useState<User | null>(null);
   const [checkoutStep, setCheckoutStep] = useState(1);
   const [status, setStatus] = useState('Pending');
@@ -31,11 +35,15 @@ export default function Checkout() {
         {checkoutStep === 1 ? <Review step={checkoutStep} setStep={setCheckoutStep} user={user} /> : null}
         {checkoutStep === 2 ? <ConfirmShipping step={checkoutStep} setStep={setCheckoutStep} user={user} /> : null}
         {checkoutStep === 3 ? (
-          <Payment step={checkoutStep} setStep={setCheckoutStep} user={user} setStatus={setStatus} />
+          <Payment
+            step={checkoutStep}
+            setStep={setCheckoutStep}
+            user={user}
+            setStatus={setStatus}
+            setBasketQuantity={setBasketQuantity}
+          />
         ) : null}
-        {checkoutStep === 4 ? (
-          <Finish step={checkoutStep} user={user} status={status} />
-        ) : null}
+        {checkoutStep === 4 ? <Finish step={checkoutStep} user={user} status={status} /> : null}
       </>
     ) : (
       <Navigate to='/products' />

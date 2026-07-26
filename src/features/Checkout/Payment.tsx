@@ -1,6 +1,6 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { User } from 'src/types/user';
@@ -13,9 +13,10 @@ type PaymentProps = {
   setStep: (step: number) => void;
   user: User;
   setStatus: (status: string) => void;
+  setBasketQuantity: Dispatch<SetStateAction<number>>;
 };
 
-export default function Payment({ step, setStep, user, setStatus }: PaymentProps) {
+export default function Payment({ step, setStep, user, setStatus, setBasketQuantity }: PaymentProps) {
   const [total, setTotal] = useState(0);
   const [isPaid, setIsPaid] = useState(false);
   const [canFinish, setCanFinish] = useState(true);
@@ -23,7 +24,9 @@ export default function Payment({ step, setStep, user, setStatus }: PaymentProps
   useEffect(() => {
     //calculate order final price in the server
     async function fetchData() {
-      setTotal(+user.cart!.reduce((accumulator, curr) => accumulator + curr.quantity * curr.product.price!, 0).toFixed(2));
+      setTotal(
+        +user.cart!.reduce((accumulator, curr) => accumulator + curr.quantity * curr.product.price!, 0).toFixed(2),
+      );
       setIsPaid(false);
       setCanFinish(true);
 
@@ -40,9 +43,7 @@ export default function Payment({ step, setStep, user, setStatus }: PaymentProps
   }, [user.cart]);
 
   return user._id && step === 3 ? (
-    isPaid ? null : // <div className='container-fluid text-center mt-3'>
-    //     <h2>Payment</h2>
-    //     <p>Total: &euro; {total}</p>
+    isPaid ? null : //     <p>Total: &euro; {total}</p> //     <h2>Payment</h2> // <div className='container-fluid text-center mt-3'>
     //     <button onClick={pay} className='btn btn-dark'>Click to pay</button>
     // </div>
     canFinish ? (
@@ -55,6 +56,7 @@ export default function Payment({ step, setStep, user, setStatus }: PaymentProps
             isPaid={isPaid}
             total={total}
             setStep={setStep}
+            setBasketQuantity={setBasketQuantity}
           />
         </Elements>
       </div>

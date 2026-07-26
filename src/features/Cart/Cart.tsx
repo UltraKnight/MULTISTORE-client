@@ -41,7 +41,7 @@ export default function Cart({
   }, []);
 
   const handleAddRemove = async (
-    e: React.FormEvent<HTMLFormElement>,
+    e: React.SubmitEvent<HTMLFormElement>,
     id: string | null,
     quantity?: number,
     availableQt?: number,
