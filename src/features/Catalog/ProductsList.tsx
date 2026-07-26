@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import type { Product } from 'src/types/product';
 import type { User } from 'src/types/user';
 import { getProducts, getProductsByCategory } from '../../api';
+import AiAssistant from './AiAssistant';
 import LoadingSpinner from 'src/ui/LoadingSpinner';
 
 // can receive a category or query to filter the products
@@ -23,8 +24,8 @@ export default function ProductsList() {
       const response = searchQuery
         ? await getProducts(searchQuery) // get products by search query
         : category
-        ? await getProductsByCategory(category) // get products by category
-        : await getProducts(); // get all products if no filter is applied
+          ? await getProductsByCategory(category) // get products by category
+          : await getProducts(); // get all products if no filter is applied
 
       setProducts(response.data);
 
@@ -193,6 +194,7 @@ export default function ProductsList() {
           );
         })}
       </div>
+      <AiAssistant products={products} />
     </>
   ) : (
     <p className='m-3'>
