@@ -1,14 +1,8 @@
-import { useEffect, useState } from 'react';
 import { FaGithubSquare, FaInfoCircle } from 'react-icons/fa';
 import { IoIosContact } from 'react-icons/io';
 
 export default function Footer() {
-  const [year, setYear] = useState<number | null>(null);
-
-  useEffect(() => {
-    const currentYear = new Date().getFullYear();
-    setYear(currentYear);
-  }, []);
+  const year = new Date().getFullYear();
 
   return year ? (
     <footer className='text-light container-fluid bg-warning'>

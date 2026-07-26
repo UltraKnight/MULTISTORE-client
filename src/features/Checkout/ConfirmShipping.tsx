@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { User } from 'src/types/user';
 
@@ -9,40 +8,21 @@ type ConfirmShippingProps = {
 };
 
 export default function ConfirmShipping({ step, setStep, user }: ConfirmShippingProps) {
-  const [canContinue, setCanContinue] = useState(false);
+  const shipping = user?.shipping;
+  const billing = user?.billing;
 
-  useEffect(() => {
-    let isAddressesOk = true;
-    if (
-      !(
-        user?.shipping?.firstName &&
-        user.shipping.lastName &&
-        user.shipping.address1 &&
-        user.shipping.city &&
-        user.shipping.state &&
-        user.shipping.postcode &&
-        user.shipping.country
-      )
-    ) {
-      isAddressesOk = false;
-    }
+  const isAddressComplete = (address?: typeof shipping) =>
+    Boolean(
+      address?.firstName &&
+      address.lastName &&
+      address.address1 &&
+      address.city &&
+      address.state &&
+      address.postcode &&
+      address.country,
+    );
 
-    if (
-      !(
-        user?.billing?.firstName &&
-        user.billing.lastName &&
-        user.billing.address1 &&
-        user.billing.city &&
-        user.billing.state &&
-        user.billing.postcode &&
-        user.billing.country
-      )
-    ) {
-      isAddressesOk = false;
-    }
-
-    setCanContinue(isAddressesOk);
-  }, [user]);
+  const canContinue = isAddressComplete(shipping) && isAddressComplete(billing);
 
   return user._id && user.shipping && user.billing && step === 2 ? (
     <>
