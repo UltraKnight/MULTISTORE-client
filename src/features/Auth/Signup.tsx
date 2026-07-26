@@ -18,7 +18,7 @@ export default function Signup({ setCurrentUser }: SignupProps) {
   const navigate = useNavigate();
 
   // REFACTOR: improve how form is handled
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 

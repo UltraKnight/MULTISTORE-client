@@ -72,7 +72,7 @@ export default function ProductsTab({ activeTab }: { activeTab: number }) {
     setNewProduct({ ...newProduct, [name]: value });
   };
 
-  const handleAddProductSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddProductSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -112,7 +112,7 @@ export default function ProductsTab({ activeTab }: { activeTab: number }) {
     }
   };
 
-  const handleUpdateProductSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateProductSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -157,7 +157,7 @@ export default function ProductsTab({ activeTab }: { activeTab: number }) {
     }
   };
 
-  const handleRemoveProduct = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRemoveProduct = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     if (!selectedProduct?._id) {

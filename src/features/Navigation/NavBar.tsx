@@ -47,7 +47,7 @@ export default function NavBar({ loggedInUser, setCurrentUser, basketQuantity }:
     toast.success(response.data);
   };
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!searchRef.current) return;
 

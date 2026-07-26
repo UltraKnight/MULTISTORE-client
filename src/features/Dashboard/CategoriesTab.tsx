@@ -41,7 +41,7 @@ export default function CategoriesTab({ activeTab }: { activeTab: number }) {
     setEditingCategory(false);
   };
 
-  const handleAddCategorySubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddCategorySubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -72,7 +72,7 @@ export default function CategoriesTab({ activeTab }: { activeTab: number }) {
     }
   };
 
-  const handleUpdateCategorySubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateCategorySubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -108,7 +108,7 @@ export default function CategoriesTab({ activeTab }: { activeTab: number }) {
     }
   };
 
-  const handleRemoveCategory = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRemoveCategory = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 

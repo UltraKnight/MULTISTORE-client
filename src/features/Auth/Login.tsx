@@ -12,7 +12,7 @@ export default function Login({ setCurrentUser }: { setCurrentUser: (user: User)
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     const username = usernameRef.current!.value;

@@ -46,7 +46,7 @@ export default function SalesTab({ activeTab }: { activeTab: number }) {
     setSelectedSale(foundSale);
   };
 
-  const handleAddCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddCommentSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -88,7 +88,7 @@ export default function SalesTab({ activeTab }: { activeTab: number }) {
     }
   };
 
-  const handleUpdateStatusSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateStatusSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 

@@ -54,7 +54,7 @@ export default function ProductDetails({
     fetchData();
   }, [productId, navigate]);
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (loggedInUser._id && product) {
       if (product.quantity! > 0) {
@@ -75,7 +75,7 @@ export default function ProductDetails({
     }
   };
 
-  const addRateSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const addRateSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     const comment = commentRef.current?.value;
     let rate = rateRef.current?.value && parseInt(rateRef.current?.value);

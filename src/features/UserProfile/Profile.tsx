@@ -89,7 +89,7 @@ export default function Profile() {
     }
   };
 
-  const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEmailSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     const email = emailRef.current?.value.trim().replace(/&nbsp;/g, '');
     if (!email) {
@@ -229,7 +229,7 @@ export default function Profile() {
     }
   };
 
-  const handleFillBillingAddress = async (e: React.FormEvent<HTMLFormElement>, postcode: string = '') => {
+  const handleFillBillingAddress = async (e: React.SubmitEvent<HTMLFormElement>, postcode: string = '') => {
     e.preventDefault();
     const latLng = await getLatLng(postcode);
     if (latLng.data.status === 'OK') {
@@ -257,7 +257,7 @@ export default function Profile() {
     }
   };
 
-  const handleFillShippingAddress = async (e: React.FormEvent<HTMLFormElement>, postcode: string = '') => {
+  const handleFillShippingAddress = async (e: React.SubmitEvent<HTMLFormElement>, postcode: string = '') => {
     e.preventDefault();
     const latLng = await getLatLng(postcode);
     if (latLng.data.status === 'OK') {
@@ -366,7 +366,7 @@ export default function Profile() {
     setCanChangePic((prev) => !prev);
   };
 
-  const resendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
+  const resendEmail = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSendingEmail(true);
     try {

@@ -75,7 +75,7 @@ export default function RetryForm({ total, orderId, retry, setRetry, setPurchase
     setError(event.error ? event.error.message : '');
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setProcessing(true);
 
