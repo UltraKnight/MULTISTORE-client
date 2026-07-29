@@ -3,8 +3,8 @@ import { useMemo, useState } from 'react';
 import type { JSX, SubmitEvent } from 'react';
 import type { Product } from 'src/types/product';
 import { testSeparatorTableRow } from 'src/utils/regex';
+import { askAIChat } from '../../api';
 
-const OPENROUTER_KEY = import.meta.env.REACT_APP_OPENROUTER_API_KEY;
 const AI_MODEL = 'openai/gpt-oss-20b:free';
 
 interface AiAssistantProps {
@@ -123,16 +123,10 @@ export default function AiAssistant({ products }: AiAssistantProps) {
       .join('\n');
   }, [products]);
 
-  const isApiEnabled = Boolean(OPENROUTER_KEY);
-
   async function askAssistant(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const userQuestion = query.trim();
     if (!userQuestion) return;
-    if (!isApiEnabled) {
-      setError('Missing OpenRouter API key. Set REACT_APP_OPENROUTER_API_KEY in your .env file.');
-      return;
-    }
 
     setError('');
     setLoading(true);
@@ -156,23 +150,14 @@ export default function AiAssistant({ products }: AiAssistantProps) {
         },
       ];
 
-      const response = await axios.post(
-        'https://openrouter.ai/api/v1/chat/completions',
-        {
-          model: AI_MODEL,
-          messages: prompt,
-          temperature: 0.7,
-          max_tokens: 350,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${OPENROUTER_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        },
-      );
+      const response = await askAIChat({
+        model: AI_MODEL,
+        messages: prompt,
+        temperature: 0.7,
+        max_tokens: 350,
+      });
 
-      const answer = response.data?.choices?.[0]?.message?.content?.trim();
+      const answer = response.data?.answer?.trim();
       if (answer) {
         setMessages((current) => [...current, { role: 'assistant', text: answer }]);
       } else {
@@ -180,7 +165,16 @@ export default function AiAssistant({ products }: AiAssistantProps) {
       }
     } catch (caughtError) {
       console.error(caughtError);
-      setError('Error connecting to AI service. Check your API key or connection.');
+      const status = axios.isAxiosError(caughtError) ? caughtError.response?.status : undefined;
+      const backendMessage = axios.isAxiosError(caughtError) ? caughtError.response?.data?.message : undefined;
+
+      if (status === 401) {
+        setError('Please log in to use the assistant.');
+      } else if (status === 429) {
+        setError(backendMessage || 'You have reached the assistant limit for now. Please wait a moment and try again.');
+      } else {
+        setError('Error connecting to AI service. Please try again later.');
+      }
     } finally {
       setLoading(false);
     }

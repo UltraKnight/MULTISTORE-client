@@ -161,6 +161,20 @@ export const sendEmail = (email: string, id: string) => {
   return axios.post(`${baseURL}/email/send`, { email: email, id: id }, { withCredentials: true });
 };
 
+export const askAIChat = (payload: {
+  model: string;
+  messages: Array<{ role: string; content: string }>;
+  temperature: number;
+  max_tokens: number;
+}) => {
+  return axios.post(`${baseURL}/ai/chat`, payload, {
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
 /* END AUTHENTICATION ROUTES */
 
 //Google api
