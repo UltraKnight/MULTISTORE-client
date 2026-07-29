@@ -157,7 +157,7 @@ export default function ProductsList() {
                 />
                 <div className='card-body d-flex flex-column justify-content-between'>
                   <h5 className='card-title'>
-                    <p>{product.name!.length > 80 ? `${product.name!.substring(0, 80)}...` : product.name}</p>
+                    <p>{product.name!.length > 80 ? `${product.name!.substring(0, 75)}...` : product.name}</p>
                   </h5>
                   <section>
                     <p className='card-text m-0'>
