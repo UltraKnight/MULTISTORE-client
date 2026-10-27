@@ -91,7 +91,7 @@ export default function ProductsList() {
                   }}
                 >
                   <Link to={`/products/${highlight._id}`}>
-                    <img src={highlight.image_url} className='d-block w-50 h-25 mx-auto' alt={highlight.name} />
+                    <img src={highlight.image_url} className='d-block w-50 h-25 mx-auto' alt={highlight.name} fetchpriority='high' />
                   </Link>
                   <div className='carousel-caption d-none d-md-block pb-3'>
                     <p
@@ -153,7 +153,7 @@ export default function ProductsList() {
                   src={product.image_url}
                   alt={product.name}
                   loading='lazy'
-                  style={{ maxHeight: '150px', width: 'auto' }}
+                  style={{ height: '150px', width: '150px' }}
                 />
                 <div className='card-body d-flex flex-column justify-content-between'>
                   <h5 className='card-title'>
@@ -181,7 +181,7 @@ export default function ProductsList() {
                 className='card-img-top img-fluid mx-auto'
                 src='/images/multistore-logo.png'
                 alt=''
-                style={{ maxHeight: '150px', width: 'auto' }}
+                style={{ height: '150px', width: '150px' }}
               />
               <div className='card-body'>
                 <h5 className='card-title'>{product.name}</h5>
