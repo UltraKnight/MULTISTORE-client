@@ -91,7 +91,7 @@ export default function ProductsList() {
                   }}
                 >
                   <Link to={`/products/${highlight._id}`}>
-                    <img src={highlight.image_url} className='d-block w-50 h-25 mx-auto' alt={highlight.name} fetchpriority='high' />
+                    <img src={highlight.image_url} className='d-block w-50 h-25 mx-auto' alt={highlight.name} fetchPriority='high' />
                   </Link>
                   <div className='carousel-caption d-none d-md-block pb-3'>
                     <p
